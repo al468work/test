@@ -1,6 +1,9 @@
 New file - hotfix
 master - editing
 testing+master - row 3
+<<<<<<< HEAD
 hewfix - branches test
 hotfix1606
 hotfix1606#2
+hotfix#3 - manual merged
+hotfix#4
