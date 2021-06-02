@@ -9,3 +9,4 @@ hotfix#3 - manual merged
 hotfix#4
 hotfix#5
 hotfix#6 hotfix1645
+hotfix#7 for remove
