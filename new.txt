@@ -5,7 +5,4 @@ testing+master - row 3
 hewfix - branches test
 hotfix1606
 hotfix1606#2
-hotfix#3
-=======
-hotfix - branch2
->>>>>>> b6243c743cfb1f799c1c96c848b45c4747a2bc94
+hotfix#3 - manual merged
