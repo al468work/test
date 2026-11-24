@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ESP32 Пульт</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#121212">
+  <style>
+    body { font-family: sans-serif; text-align: center; padding: 30px 15px; background: #121212; color: #fff; margin: 0; }
+    h2 { margin-bottom: 25px; }
+    button { width: 85%; max-width: 300px; padding: 16px; font-size: 18px; margin: 10px auto; display: block; border-radius: 10px; border: none; cursor: pointer; font-weight: bold; }
+    .connect { background: #2196F3; color: white; }
+    .on { background: #4CAF50; color: white; }
+    .off { background: #f44336; color: white; }
+    #status { margin-top: 25px; padding: 12px; background: #1e1e1e; border-radius: 8px; color: #bbb; font-size: 15px; }
+  </style>
+</head>
+<body>
+  <h2>ESP32 BLE Пульт</h2>
+  
+  <button class="connect" onclick="connectBLE()">1. Подключиться к ESP32</button>
+  <button class="on" onclick="sendCommand(1)">Включить (1)</button>
+  <button class="off" onclick="sendCommand(0)">Выключить (0)</button>
+  
+  <div id="status">Статус: не подключено</div>
+
+  <script>
+    // Регистрация Service Worker для работы без интернета
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js');
+    }
+
+    const SERVICE_UUID = "4fafc201-1fb5-459e-8fcc-c5c9c331914b";
+    const CHAR_UUID    = "beb5483e-36e1-4688-b7f5-ea07361b26a8";
+    let bleCharacteristic = null;
+
+    async function connectBLE() {
+      const statusEl = document.getElementById('status');
+      try {
+        statusEl.innerText = "Поиск ESP32 (ждите до 15-20 сек)...";
+        const device = await navigator.bluetooth.requestDevice({
+          filters: [{ services: [SERVICE_UUID] }]
+        });
+        
+        statusEl.innerText = "Подключение...";
+        const server = await device.gatt.connect();
+        const service = await server.getPrimaryService(SERVICE_UUID);
+        bleCharacteristic = await service.getCharacteristic(CHAR_UUID);
+        
+        statusEl.innerText = "Подключено! Сон ESP32 отменен.";
+        
+        device.addEventListener('gattserverdisconnected', () => {
+          statusEl.innerText = "Отключено (ESP32 ушла в цикл сна)";
+          bleCharacteristic = null;
+        });
+      } catch (error) {
+        statusEl.innerText = "Ошибка: " + error.message;
+      }
+    }
+
+    async function sendCommand(val) {
+      if (!bleCharacteristic) {
+        alert("Сначала нажмите «Подключиться к ESP32»!");
+        return;
+      }
+      try {
+        await bleCharacteristic.writeValue(new Uint8Array([val]));
+        document.getElementById('status').innerText = "Отправлена команда: " + val;
+      } catch (error) {
+        document.getElementById('status').innerText = "Ошибка отправки: " + error.message;
+      }
+    }
+  </script>
+</body>
+</html>
