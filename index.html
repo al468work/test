@@ -1,76 +1,71 @@
+html
 <!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ESP32 Пульт</title>
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#121212">
+  <title>Мои проекты</title>
   <style>
-    body { font-family: sans-serif; text-align: center; padding: 30px 15px; background: #121212; color: #fff; margin: 0; }
-    h2 { margin-bottom: 25px; }
-    button { width: 85%; max-width: 300px; padding: 16px; font-size: 18px; margin: 10px auto; display: block; border-radius: 10px; border: none; cursor: pointer; font-weight: bold; }
-    .connect { background: #2196F3; color: white; }
-    .on { background: #4CAF50; color: white; }
-    .off { background: #f44336; color: white; }
-    #status { margin-top: 25px; padding: 12px; background: #1e1e1e; border-radius: 8px; color: #bbb; font-size: 15px; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 0 20px;
+      background-color: #f6f8fa;
+      color: #24292f;
+    }
+    h1 {
+      border-bottom: 1px solid #d0d7de;
+      padding-bottom: 10px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+    .card {
+      background: #ffffff;
+      border: 1px solid #d0d7de;
+      border-radius: 6px;
+      padding: 20px;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      border-color: #0969da;
+    }
+    .card h2 {
+      margin: 0 0 10px 0;
+      color: #0969da;
+      font-size: 1.25rem;
+    }
+    .card p {
+      margin: 0;
+      color: #57606a;
+      font-size: 0.95rem;
+    }
   </style>
 </head>
 <body>
-  <h2>ESP32 BLE Пульт</h2>
+
+  <h1>Мои проекты</h1>
   
-  <button class="connect" onclick="connectBLE()">1. Подключиться к ESP32</button>
-  <button class="on" onclick="sendCommand(1)">Включить (1)</button>
-  <button class="off" onclick="sendCommand(0)">Выключить (0)</button>
-  
-  <div id="status">Статус: не подключено</div>
+  <div class="grid">
+    <!-- Обратите внимание на относительные ссылки без слеша в начале -->
+    <a href="./subfolder1/" class="card">
+      <h2>Проект 1</h2>
+      <p>Краткое описание первого проекта или приложения.</p>
+    </a>
 
-  <script>
-    // Регистрация Service Worker для работы без интернета
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js');
-    }
+    <a href="./project-2/" class="card">
+      <h2>Проект 2</h2>
+      <p>Краткое описание второго проекта или приложения.</p>
+    </a>
+  </div>
 
-    const SERVICE_UUID = "4fafc201-1fb5-459e-8fcc-c5c9c331914b";
-    const CHAR_UUID    = "beb5483e-36e1-4688-b7f5-ea07361b26a8";
-    let bleCharacteristic = null;
-
-    async function connectBLE() {
-      const statusEl = document.getElementById('status');
-      try {
-        statusEl.innerText = "Поиск ESP32 (ждите до 15-20 сек)...";
-        const device = await navigator.bluetooth.requestDevice({
-          filters: [{ services: [SERVICE_UUID] }]
-        });
-        
-        statusEl.innerText = "Подключение...";
-        const server = await device.gatt.connect();
-        const service = await server.getPrimaryService(SERVICE_UUID);
-        bleCharacteristic = await service.getCharacteristic(CHAR_UUID);
-        
-        statusEl.innerText = "Подключено! Сон ESP32 отменен.";
-        
-        device.addEventListener('gattserverdisconnected', () => {
-          statusEl.innerText = "Отключено (ESP32 ушла в цикл сна)";
-          bleCharacteristic = null;
-        });
-      } catch (error) {
-        statusEl.innerText = "Ошибка: " + error.message;
-      }
-    }
-
-    async function sendCommand(val) {
-      if (!bleCharacteristic) {
-        alert("Сначала нажмите «Подключиться к ESP32»!");
-        return;
-      }
-      try {
-        await bleCharacteristic.writeValue(new Uint8Array([val]));
-        document.getElementById('status').innerText = "Отправлена команда: " + val;
-      } catch (error) {
-        document.getElementById('status').innerText = "Ошибка отправки: " + error.message;
-      }
-    }
-  </script>
 </body>
 </html>
