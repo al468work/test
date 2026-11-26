@@ -8,15 +8,15 @@
 <div class="app-content">
   <div class="container-fluid">
     <div class="card">
-      <!-- Шапка карточки: заголовок, панель действий при выборе и поиск -->
+      <!-- Шапка карточки -->
       <div class="card-header d-flex flex-wrap justify-content-between align-items-center gap-2">
         <div class="d-flex align-items-center gap-3">
           <h3 class="card-title mb-0">Список пользователей</h3>
           
-          <!-- Панель появляется, когда выбрана хотя бы 1 строка -->
-          <div id="bulkActions" class="d-none align-items-center gap-2">
-            <span class="badge text-bg-primary" id="selectedCount">Выбрано: 0</span>
-            <button type="button" id="deleteSelectedBtn" class="btn btn-xs btn-danger">Удалить выбранные</button>
+          <!-- Панель появляется, когда выбрана строка -->
+          <div id="rowActions" class="d-none align-items-center gap-2">
+            <span class="badge text-bg-primary" id="selectedInfo">Выбрано: ID 1</span>
+            <button type="button" id="deleteSelectedBtn" class="btn btn-xs btn-danger">Удалить</button>
           </div>
         </div>
 
@@ -28,10 +28,6 @@
         <table class="table table-hover align-middle mb-0" id="usersTable">
           <thead class="table-light">
             <tr>
-              <th style="width: 40px;" class="text-center">
-                <!-- Главный чекбокс "Выбрать все" -->
-                <input class="form-check-input" type="checkbox" id="selectAllCheckbox" title="Выбрать все">
-              </th>
               <th style="width: 60px;">ID</th>
               <th>Имя</th>
               <th>Роль</th>
@@ -52,60 +48,37 @@
     const tbody = document.getElementById('usersTableBody');
     const searchInput = document.getElementById('tableSearch');
     const reloadBtn = document.getElementById('reloadDataBtn');
-    const selectAllCheckbox = document.getElementById('selectAllCheckbox');
-    const bulkActions = document.getElementById('bulkActions');
-    const selectedCountBadge = document.getElementById('selectedCount');
+    const rowActions = document.getElementById('rowActions');
+    const selectedInfo = document.getElementById('selectedInfo');
     const deleteSelectedBtn = document.getElementById('deleteSelectedBtn');
 
-    // Обновление счетчика выбранных строк и подсветки
-    function updateSelectionState() {
-      const allCheckboxes = Array.from(tbody.querySelectorAll('.row-checkbox'));
-      // Учитываем только видимые (не скрытые поиском) строки для чекбокса "Выбрать все"
-      const visibleCheckboxes = allCheckboxes.filter(cb => cb.closest('tr').style.display !== 'none');
-      const checkedCheckboxes = allCheckboxes.filter(cb => cb.checked);
-
-      // Подсвечиваем выбранные строки классом Bootstrap table-active
-      allCheckboxes.forEach(cb => {
-        cb.closest('tr').classList.toggle('table-active', cb.checked);
-      });
-
-      // Показываем или скрываем панель массовых действий
-      if (checkedCheckboxes.length > 0) {
-        bulkActions.classList.remove('d-none');
-        bulkActions.classList.add('d-flex');
-        selectedCountBadge.textContent = `Выбрано: ${checkedCheckboxes.length}`;
+    // Обновление панели действий в зависимости от выбранной строки
+    function updateSelectionUI() {
+      const selectedRow = tbody.querySelector('tr.table-primary');
+      
+      if (selectedRow && selectedRow.style.display !== 'none') {
+        const id = selectedRow.dataset.id;
+        const name = selectedRow.dataset.name;
+        selectedInfo.textContent = `Выбрано: ${name} (ID: ${id})`;
+        rowActions.classList.remove('d-none');
+        rowActions.classList.add('d-flex');
       } else {
-        bulkActions.classList.add('d-none');
-        bulkActions.classList.remove('d-flex');
-      }
-
-      // Состояние главного чекбокса в шапке (выбран / не выбран / частичный выбор)
-      const visibleCheckedCount = visibleCheckboxes.filter(cb => cb.checked).length;
-      if (visibleCheckboxes.length === 0 || visibleCheckedCount === 0) {
-        selectAllCheckbox.checked = false;
-        selectAllCheckbox.indeterminate = false;
-      } else if (visibleCheckedCount === visibleCheckboxes.length) {
-        selectAllCheckbox.checked = true;
-        selectAllCheckbox.indeterminate = false;
-      } else {
-        selectAllCheckbox.checked = false;
-        selectAllCheckbox.indeterminate = true; // Ставит прочерк "-", если выбраны не все строки
+        rowActions.classList.add('d-none');
+        rowActions.classList.remove('d-flex');
       }
     }
 
-    // Отрисовка массива пользователей в таблицу
+    // Отрисовка строк
     function renderRows(users) {
       if (!users || users.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" class="text-center py-4 text-muted">Нет данных для отображения</td></tr>';
-        updateSelectionState();
+        tbody.innerHTML = '<tr><td colspan="4" class="text-center py-4 text-muted">Нет данных для отображения</td></tr>';
+        updateSelectionUI();
         return;
       }
 
+      // Сохраняем ID и имя в data-атрибуты строки, чтобы легко получать их при клике
       tbody.innerHTML = users.map(user => `
-        <tr style="cursor: pointer;">
-          <td class="text-center">
-            <input class="form-check-input row-checkbox" type="checkbox" value="${user.id}">
-          </td>
+        <tr data-id="${user.id}" data-name="${user.name}" style="cursor: pointer; user-select: none;">
           <td>${user.id}</td>
           <td>${user.name}</td>
           <td>${user.role}</td>
@@ -113,16 +86,14 @@
         </tr>
       `).join('');
 
-      updateSelectionState();
+      updateSelectionUI();
     }
 
-    // Загрузка данных из JSON
+    // Загрузка данных
     async function loadTableData() {
-      selectAllCheckbox.checked = false;
-      selectAllCheckbox.indeterminate = false;
       tbody.innerHTML = `
         <tr>
-          <td colspan="5" class="text-center py-4 text-muted">
+          <td colspan="4" class="text-center py-4 text-muted">
             <div class="spinner-border spinner-border-sm me-2" role="status"></div>
             Загрузка данных...
           </td>
@@ -131,11 +102,10 @@
 
       try {
         const response = await fetch(`data/users.json?t=${Date.now()}`);
-        if (!response.ok) throw new Error('Файл data/users.json не найден');
+        if (!response.ok) throw new Error('Файл не найден');
         const users = await response.json();
         renderRows(users);
       } catch (error) {
-        // Резервные тестовые данные на случай, если файл data/users.json еще не создан
         renderRows([
           { id: 1, name: 'Иван Иванов', role: 'Администратор', status: 'Активен', badge: 'text-bg-success' },
           { id: 2, name: 'Анна Смирнова', role: 'Менеджер', status: 'Ожидает', badge: 'text-bg-warning' },
@@ -145,59 +115,44 @@
       }
     }
 
-    // 1. Клик по главному чекбоксу "Выбрать все"
-    selectAllCheckbox.addEventListener('change', function () {
-      const isChecked = this.checked;
-      const rows = tbody.querySelectorAll('tr');
-      rows.forEach(row => {
-        // Выбираем только те строки, которые не скрыты поиском
-        if (row.style.display !== 'none') {
-          const cb = row.querySelector('.row-checkbox');
-          if (cb) cb.checked = isChecked;
-        }
-      });
-      updateSelectionState();
-    });
-
-    // 2. Клик по чекбоксу или по самой строке таблицы
+    // Клик по строке (одиночный выбор)
     tbody.addEventListener('click', (event) => {
-      const row = event.target.closest('tr');
-      if (!row) return;
-      const checkbox = row.querySelector('.row-checkbox');
-      if (!checkbox) return;
+      const clickedRow = event.target.closest('tr');
+      if (!clickedRow || !clickedRow.dataset.id) return;
 
-      // Если кликнули по самой строке (а не прямо в квадратик чекбокса), переключаем чекбокс вручную
-      if (event.target !== checkbox) {
-        checkbox.checked = !checkbox.checked;
+      const isAlreadySelected = clickedRow.classList.contains('table-primary');
+
+      // Снимаем выделение со всех строк
+      tbody.querySelectorAll('tr').forEach(row => row.classList.remove('table-primary'));
+
+      // Если строка не была выбрана — подсвечиваем её (повторный клик снимает выделение)
+      if (!isAlreadySelected) {
+        clickedRow.classList.add('table-primary');
       }
-      updateSelectionState();
+
+      updateSelectionUI();
     });
 
-    // 3. Пример действия с выбранными строками (удаление из таблицы на экране)
+    // Действие с выбранной строкой
     deleteSelectedBtn.addEventListener('click', () => {
-      const checkedBoxes = tbody.querySelectorAll('.row-checkbox:checked');
-      const selectedIds = Array.from(checkedBoxes).map(cb => cb.value);
-      
-      // Выводим выбранные ID в консоль (здесь можно отправить запрос на ваш сервер)
-      console.log('Выбранные ID:', selectedIds);
-
-      checkedBoxes.forEach(cb => cb.closest('tr').remove());
-      updateSelectionState();
+      const selectedRow = tbody.querySelector('tr.table-primary');
+      if (selectedRow) {
+        console.log('Удаляем запись с ID:', selectedRow.dataset.id);
+        selectedRow.remove();
+        updateSelectionUI();
+      }
     });
 
-    // 4. Живой поиск по таблице
+    // Поиск по таблице
     searchInput.addEventListener('input', function () {
       const query = this.value.toLowerCase();
-      const rows = tbody.querySelectorAll('tr');
-      rows.forEach(row => {
+      tbody.querySelectorAll('tr').forEach(row => {
         row.style.display = row.textContent.toLowerCase().includes(query) ? '' : 'none';
       });
-      updateSelectionState();
+      updateSelectionUI();
     });
 
     reloadBtn.addEventListener('click', loadTableData);
-
-    // Автозапуск при открытии страницы
     loadTableData();
   }
 </script>
