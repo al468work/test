@@ -4,18 +4,44 @@
 <div class="app-content">
   <div class="container-fluid">
     <div class="card">
-      <div class="card-header"><h3 class="card-title">Список пользователей</h3></div>
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h3 class="card-title">Список пользователей</h3>
+        <!-- Поле для фильтрации -->
+        <input type="text" id="tableSearch" class="form-control form-control-sm w-auto" placeholder="Поиск по таблице...">
+      </div>
       <div class="card-body p-0">
-        <table class="table table-striped">
+        <table class="table table-striped" id="usersTable">
           <thead>
-            <tr><th>ID</th><th>Имя</th><th>Статус</th></tr>
+            <tr>
+              <th>ID</th>
+              <th>Имя</th>
+              <th>Статус</th>
+            </tr>
           </thead>
           <tbody>
             <tr><td>1</td><td>Иван Иванов</td><td><span class="badge text-bg-success">Активен</span></td></tr>
             <tr><td>2</td><td>Анна Смирнова</td><td><span class="badge text-bg-warning">Ожидает</span></td></tr>
+            <tr><td>3</td><td>Петр Сидоров</td><td><span class="badge text-bg-danger">Заблокирован</span></td></tr>
           </tbody>
         </table>
       </div>
     </div>
   </div>
 </div>
+
+<!-- Этот скрипт теперь автоматически запустится при открытии вкладки "Таблицы" -->
+<script>
+  // Оборачиваем в блок { ... }, чтобы переменные не конфликтовали при повторном открытии вкладки
+  {
+    const searchInput = document.getElementById('tableSearch');
+    const tableRows = document.querySelectorAll('#usersTable tbody tr');
+
+    searchInput.addEventListener('input', function () {
+      const query = this.value.toLowerCase();
+      tableRows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(query) ? '' : 'none';
+      });
+    });
+  }
+</script>
