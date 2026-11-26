@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ESP32 Пульт из подпапки</title>
+  <title>ESP32 Пульт</title>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#121212">
   <style>
@@ -20,7 +20,8 @@
   <h2>ESP32 BLE Пульт</h2>
   
   <button class="connect" onclick="connectBLE()">1. Подключиться к ESP32</button>
-
+  <button class="on" onclick="sendCommand(1)">Включить (1)</button>
+  <button class="off" onclick="sendCommand(0)">Выключить (0)</button>
   
   <div id="status">Статус: не подключено</div>
 
