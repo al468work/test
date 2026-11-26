@@ -25,7 +25,7 @@
       <!-- Боковое меню -->
       <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
         <div class="sidebar-brand">
-          <a href="#" data-view="views/dashboard.html" class="brand-link">
+          <a href="#dashboard" class="brand-link">
             <span class="brand-text fw-light">Моя Админка</span>
           </a>
         </div>
@@ -33,18 +33,18 @@
           <nav class="mt-2">
             <ul class="nav sidebar-menu flex-column" role="menu">
               <li class="nav-item">
-                <!-- Указываем путь к фрагменту в data-view -->
-                <a href="#" data-view="views/dashboard.html" class="nav-link active">
+                <!-- Имя в href="#..." должно совпадать с именем файла в папке views/ -->
+                <a href="#dashboard" class="nav-link">
                   <p>Дашборд</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" data-view="views/tables.html" class="nav-link">
+                <a href="#tables" class="nav-link">
                   <p>Таблицы</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" data-view="views/settings.html" class="nav-link">
+                <a href="#settings" class="nav-link">
                   <p>Настройки</p>
                 </a>
               </li>
@@ -53,7 +53,7 @@
         </div>
       </aside>
 
-      <!-- Центральная часть (сюда JS будет подгружать страницы) -->
+      <!-- Центральная часть -->
       <main class="app-main" id="main-content"></main>
 
       <!-- Подвал -->
@@ -65,40 +65,45 @@
     <script src="js/bootstrap.bundle.min.js"></script>
     <script src="js/adminlte.min.js"></script>
 
-    <!-- Скрипт динамической подгрузки контента -->
+    <!-- Скрипт подгрузки с запоминанием раздела через URL-хэш -->
     <script>
       const mainContent = document.getElementById('main-content');
-      const menuLinks = document.querySelectorAll('.sidebar-menu .nav-link[data-view]');
+      const menuLinks = document.querySelectorAll('.sidebar-menu .nav-link');
 
-      // Функция загрузки HTML-фрагмента
-      async function loadView(url) {
+      // Загрузка HTML-фрагмента и обновление меню
+      async function loadView(viewName) {
+        // Если имя пустое, открываем dashboard по умолчанию
+        const page = viewName || 'dashboard';
+
+        // Подсвечиваем активный пункт в меню
+        menuLinks.forEach(link => {
+          const linkHash = link.getAttribute('href').replace('#', '');
+          link.classList.toggle('active', linkHash === page);
+        });
+
         try {
-          const response = await fetch(url);
-          if (!response.ok) throw new Error('Файл не найден: ' + url);
-          const html = await response.text();
-          mainContent.innerHTML = html;
+          const response = await fetch(`views/${page}.html`);
+          if (!response.ok) throw new Error(`Страница views/${page}.html не найдена`);
+          mainContent.innerHTML = await response.text();
         } catch (error) {
-          mainContent.innerHTML = `<div class="p-4 text-danger">Ошибка загрузки: ${error.message}</div>`;
+          mainContent.innerHTML = `<div class="p-4 text-danger">Ошибка: ${error.message}</div>`;
         }
       }
 
-      // Обработка кликов по пунктам меню
-      menuLinks.forEach(link => {
-        link.addEventListener('click', (event) => {
-          event.preventDefault(); // Отменяем стандартный переход по ссылке
+      // Получаем имя раздела из адресной строки (например, из "#tables" берем "tables")
+      function getCurrentRoute() {
+        return window.location.hash.replace('#', '');
+      }
 
-          // Переключаем подсветку активного пункта меню
-          menuLinks.forEach(item => item.classList.remove('active'));
-          link.classList.add('active');
-
-          // Загружаем выбранную страницу
-          const viewUrl = link.getAttribute('data-view');
-          loadView(viewUrl);
-        });
+      // Слушаем изменение хэша (срабатывает при клике по ссылкам #... и кнопке "Назад" в браузере)
+      window.addEventListener('hashchange', () => {
+        loadView(getCurrentRoute());
       });
 
-      // Загружаем главную страницу сразу при открытии сайта
-      loadView('views/dashboard.html');
+      // При первом открытии или обновлении (F5) загружаем раздел из адресной строки
+      window.addEventListener('DOMContentLoaded', () => {
+        loadView(getCurrentRoute());
+      });
     </script>
   </body>
 </html>
