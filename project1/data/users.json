@@ -1,0 +1,5 @@
+[
+  { "id": 1, "name": "Иван Иванов", "role": "Администратор", "status": "Активен", "badge": "text-bg-success" },
+  { "id": 2, "name": "Анна Смирнова", "role": "Менеджер", "status": "Ожидает", "badge": "text-bg-warning" },
+  { "id": 3, "name": "Петр Сидоров", "role": "Пользователь", "status": "Заблокирован", "badge": "text-bg-danger" }
+]
