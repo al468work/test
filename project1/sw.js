@@ -1,134 +1,95 @@
-<!doctype html>
-<html lang="ru">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Админ-панель | AdminLTE 4</title>
-    
-    <!-- Настройки PWA для Android -->
-    <link rel="manifest" href="manifest.json" />
-    <meta name="theme-color" content="#343a40" />
-    <link rel="apple-touch-icon" href="icon-512.png" />
+const CACHE_NAME = 'admin-ui-v3';
+const API_CACHE_NAME = 'admin-api-data-v1';
 
-    <!-- Локальные стили AdminLTE -->
-    <link rel="stylesheet" href="css/adminlte.min.css" />
-  </head>
-  <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
-    <div class="app-wrapper">
-      <!-- Верхняя шапка -->
-      <nav class="app-header navbar navbar-expand bg-body">
-        <div class="container-fluid">
-          <ul class="navbar-nav">
-            <li class="nav-item">
-              <a class="nav-link" data-lte-toggle="sidebar" href="#" role="button">☰</a>
-            </li>
-            <li class="nav-item d-none d-md-block">
-              <span class="nav-link text-muted">Панель управления</span>
-            </li>
-          </ul>
-        </div>
-      </nav>
+// Файлы интерфейса, которые должны работать 100% автономно
+const UI_ASSETS = [
+  './',
+  './index.html',
+  './manifest.json',
+  './css/adminlte.min.css',
+  './js/bootstrap.bundle.min.js',
+  './js/adminlte.min.js',
+  './views/dashboard.html',
+  './views/tables.html',
+  './views/settings.html'
+];
 
-      <!-- Боковое меню -->
-      <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
-        <div class="sidebar-brand">
-          <a href="#dashboard" class="brand-link">
-            <span class="brand-text fw-light">Моя Админка</span>
-          </a>
-        </div>
-        <div class="sidebar-wrapper">
-          <nav class="mt-2">
-            <ul class="nav sidebar-menu flex-column" role="menu">
-              <li class="nav-item">
-                <a href="#dashboard" class="nav-link">
-                  <p>Дашборд</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#tables" class="nav-link">
-                  <p>Таблицы</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#settings" class="nav-link">
-                  <p>Настройки</p>
-                </a>
-              </li>
-            </ul>
-          </nav>
-        </div>
-      </aside>
+// 1. Установка: сохраняем весь интерфейс в память телефона
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => {
+      return Promise.allSettled(
+        UI_ASSETS.map((url) =>
+          cache.add(url).catch((err) => console.warn('Пропущен файл при кэшировании:', url))
+        )
+      );
+    })
+  );
+  self.skipWaiting();
+});
 
-      <!-- Центральная часть (сюда подгружаются вьюхи) -->
-      <main class="app-main" id="main-content">
-        <div class="p-4 text-muted">Загрузка раздела...</div>
-      </main>
+// 2. Активация: удаляем устаревшие версии кэша интерфейса
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then((keys) => {
+      return Promise.all(
+        keys
+          .filter((key) => key !== CACHE_NAME && key !== API_CACHE_NAME)
+          .map((key) => caches.delete(key))
+      );
+    })
+  );
+  self.clients.claim();
+});
 
-      <!-- Подвал -->
-      <footer class="app-footer">
-        <strong>AdminLTE 4</strong> на GitHub Pages.
-      </footer>
-    </div>
+// 3. Обработка всех запросов
+self.addEventListener('fetch', (event) => {
+  if (event.request.method !== 'GET') return;
 
-    <!-- Локальные скрипты Bootstrap и AdminLTE -->
-    <script src="js/bootstrap.bundle.min.js"></script>
-    <script src="js/adminlte.min.js"></script>
+  const url = new URL(event.request.url);
 
-    <!-- Скрипт роутинга и запуска JS внутри подгружаемых страниц -->
-    <script>
-      const mainContent = document.getElementById('main-content');
-      const menuLinks = document.querySelectorAll('.sidebar-menu .nav-link');
-
-      // Принудительный запуск тегов <script> внутри загруженного HTML
-      function executeScripts(container) {
-        const scripts = container.querySelectorAll('script');
-        scripts.forEach(oldScript => {
-          const newScript = document.createElement('script');
-          Array.from(oldScript.attributes).forEach(attr => {
-            newScript.setAttribute(attr.name, attr.value);
-          });
-          newScript.textContent = oldScript.textContent;
-          oldScript.parentNode.replaceChild(newScript, oldScript);
-        });
-      }
-
-      // Загрузка HTML-фрагмента и подсветка активного пункта меню
-      async function loadView(viewName) {
-        const page = viewName || 'dashboard';
-
-        menuLinks.forEach(link => {
-          const linkHash = link.getAttribute('href').replace('#', '');
-          link.classList.toggle('active', linkHash === page);
-        });
-
-        try {
-          const response = await fetch(`views/${page}.html?t=${Date.now()}`);
-          if (!response.ok) throw new Error(`Файл views/${page}.html не найден (${response.status})`);
-          
-          mainContent.innerHTML = await response.text();
-          executeScripts(mainContent);
-        } catch (error) {
-          mainContent.innerHTML = `<div class="p-4 text-danger">Ошибка: ${error.message}</div>`;
+  // А. Если запрос идет к файлам нашего интерфейса (тот же домен GitHub Pages)
+  if (url.origin === self.location.origin) {
+    event.respondWith(
+      caches.match(event.request, { ignoreSearch: true }).then((cachedResponse) => {
+        // Если файл есть в кэше — отдаем его МГНОВЕННО (работает в авиарежиме)
+        if (cachedResponse) {
+          return cachedResponse;
         }
-      }
-
-      function getCurrentRoute() {
-        return window.location.hash.replace('#', '');
-      }
-
-      window.addEventListener('hashchange', () => loadView(getCurrentRoute()));
-      window.addEventListener('DOMContentLoaded', () => loadView(getCurrentRoute()));
-    </script>
-
-    <!-- Регистрация Service Worker для автономной работы (офлайн) -->
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('./sw.js')
-            .then(() => console.log('Офлайн-режим (Service Worker) активирован'))
-            .catch(err => console.error('Ошибка Service Worker:', err));
+        // Если файла еще нет в кэше — качаем из сети и сохраняем
+        return fetch(event.request).then((networkResponse) => {
+          if (networkResponse && networkResponse.status === 200) {
+            const clone = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+          }
+          return networkResponse;
         });
-      }
-    </script>
-  </body>
-</html>
+      })
+    );
+    return;
+  }
+
+  // Б. Если запрос идет на внешний REST API (другой домен)
+  event.respondWith(
+    fetch(event.request)
+      .then((networkResponse) => {
+        // Сохраняем свежий ответ API в отдельный кэш на случай потери связи
+        if (networkResponse && networkResponse.status === 200) {
+          const clone = networkResponse.clone();
+          caches.open(API_CACHE_NAME).then((cache) => cache.put(event.request, clone));
+        }
+        return networkResponse;
+      })
+      .catch(async () => {
+        // Если интернета нет — отдаем последние сохраненные данные от API
+        const cachedApi = await caches.match(event.request);
+        if (cachedApi) {
+          return cachedApi;
+        }
+        return new Response(JSON.stringify({ error: 'Offline: нет сохраненных данных' }), {
+          status: 503,
+          headers: { 'Content-Type': 'application/json' }
+        });
+      })
+  );
+});
