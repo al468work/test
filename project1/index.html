@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Админ-панель | AdminLTE 4</title>
+    <title>Дашборд | Моя Админка</title>
     <link rel="stylesheet" href="css/adminlte.min.css" />
   </head>
   <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
@@ -16,35 +16,35 @@
               <a class="nav-link" data-lte-toggle="sidebar" href="#" role="button">☰</a>
             </li>
             <li class="nav-item d-none d-md-block">
-              <span class="nav-link text-muted">Панель управления</span>
+              <a href="index.html" class="nav-link">Главная</a>
             </li>
           </ul>
         </div>
       </nav>
 
-      <!-- Боковое меню (управляет вкладками) -->
+      <!-- Боковое меню -->
       <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
         <div class="sidebar-brand">
-          <a href="#" class="brand-link">
+          <a href="index.html" class="brand-link">
             <span class="brand-text fw-light">Моя Админка</span>
           </a>
         </div>
         <div class="sidebar-wrapper">
           <nav class="mt-2">
-            <!-- role="tablist" связывает меню с блоками контента -->
-            <ul class="nav sidebar-menu flex-column" role="tablist">
+            <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="menu">
               <li class="nav-item">
-                <a href="#view-dashboard" class="nav-link active" data-bs-toggle="pill" role="tab">
+                <!-- Класс active выделяет текущую страницу -->
+                <a href="index.html" class="nav-link active">
                   <p>Дашборд</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#view-tables" class="nav-link" data-bs-toggle="pill" role="tab">
+                <a href="tables.html" class="nav-link">
                   <p>Таблицы</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#view-settings" class="nav-link" data-bs-toggle="pill" role="tab">
+                <a href="settings.html" class="nav-link">
                   <p>Настройки</p>
                 </a>
               </li>
@@ -53,97 +53,26 @@
         </div>
       </aside>
 
-      <!-- Основной контент (контейнер для всех вьюх) -->
+      <!-- Уникальный контент страницы -->
       <main class="app-main">
-        <div class="tab-content">
-          
-          <!-- ВЬЮХА 1: ДАШБОРД -->
-          <div class="tab-pane fade show active" id="view-dashboard" role="tabpanel">
-            <div class="app-content-header">
-              <div class="container-fluid"><h3 class="mb-0">Главный дашборд</h3></div>
-            </div>
-            <div class="app-content">
-              <div class="container-fluid">
-                <div class="row">
-                  <div class="col-lg-4 col-6">
-                    <div class="small-box text-bg-primary">
-                      <div class="inner"><h3>150</h3><p>Новых заказов</p></div>
-                    </div>
-                  </div>
-                  <div class="col-lg-4 col-6">
-                    <div class="small-box text-bg-success">
-                      <div class="inner"><h3>53%</h3><p>Рост показателей</p></div>
-                    </div>
-                  </div>
-                  <div class="col-lg-4 col-6">
-                    <div class="small-box text-bg-warning">
-                      <div class="inner"><h3>44</h3><p>Регистрации</p></div>
-                    </div>
-                  </div>
+        <div class="app-content-header">
+          <div class="container-fluid"><h3 class="mb-0">Главный дашборд</h3></div>
+        </div>
+        <div class="app-content">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-lg-4 col-6">
+                <div class="small-box text-bg-primary">
+                  <div class="inner"><h3>150</h3><p>Новых заказов</p></div>
+                </div>
+              </div>
+              <div class="col-lg-4 col-6">
+                <div class="small-box text-bg-success">
+                  <div class="inner"><h3>53%</h3><p>Рост показателей</p></div>
                 </div>
               </div>
             </div>
           </div>
-
-          <!-- ВЬЮХА 2: ТАБЛИЦЫ -->
-          <div class="tab-pane fade" id="view-tables" role="tabpanel">
-            <div class="app-content-header">
-              <div class="container-fluid"><h3 class="mb-0">Таблицы данных</h3></div>
-            </div>
-            <div class="app-content">
-              <div class="container-fluid">
-                <div class="card">
-                  <div class="card-header"><h3 class="card-title">Список пользователей</h3></div>
-                  <div class="card-body p-0">
-                    <table class="table table-striped">
-                      <thead>
-                        <tr>
-                          <th>ID</th>
-                          <th>Имя</th>
-                          <th>Статус</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr><td>1</td><td>Иван Иванов</td><td><span class="badge text-bg-success">Активен</span></td></tr>
-                        <tr><td>2</td><td>Анна Смирнова</td><td><span class="badge text-bg-warning">Ожидает</span></td></tr>
-                        <tr><td>3</td><td>Петр Сидоров</td><td><span class="badge text-bg-danger">Заблокирован</span></td></tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- ВЬЮХА 3: НАСТРОЙКИ (Пример формы) -->
-          <div class="tab-pane fade" id="view-settings" role="tabpanel">
-            <div class="app-content-header">
-              <div class="container-fluid"><h3 class="mb-0">Настройки проекта</h3></div>
-            </div>
-            <div class="app-content">
-              <div class="container-fluid">
-                <div class="card card-primary">
-                  <div class="card-header"><h3 class="card-title">Основные параметры</h3></div>
-                  <form>
-                    <div class="card-body">
-                      <div class="mb-3">
-                        <label class="form-label">Название сайта</label>
-                        <input type="text" class="form-control" value="Моя Админка">
-                      </div>
-                      <div class="mb-3">
-                        <label class="form-label">Email администратора</label>
-                        <input type="email" class="form-control" placeholder="admin@example.com">
-                      </div>
-                    </div>
-                    <div class="card-footer">
-                      <button type="button" class="btn btn-primary">Сохранить</button>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
-
         </div>
       </main>
 
