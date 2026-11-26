@@ -102,7 +102,7 @@
         });
 
         try {
-          const response = await fetch(`views/${page}.html?t=${Date.now()}`);
+          const response = await fetch(`views/${page}.html`);
           if (!response.ok) throw new Error(`Файл views/${page}.html не найден (${response.status})`);
           
           mainContent.innerHTML = await response.text();
