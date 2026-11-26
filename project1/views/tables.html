@@ -76,7 +76,6 @@
         return;
       }
 
-      // Сохраняем ID и имя в data-атрибуты строки, чтобы легко получать их при клике
       tbody.innerHTML = users.map(user => `
         <tr data-id="${user.id}" data-name="${user.name}" style="cursor: pointer; user-select: none;">
           <td>${user.id}</td>
@@ -89,7 +88,7 @@
       updateSelectionUI();
     }
 
-    // Загрузка данных
+    // Загрузка данных (чистый путь для работы из кэша без интернета)
     async function loadTableData() {
       tbody.innerHTML = `
         <tr>
@@ -101,11 +100,12 @@
       `;
 
       try {
-        const response = await fetch(`data/users.json?t=${Date.now()}`);
+        const response = await fetch('data/users.json');
         if (!response.ok) throw new Error('Файл не найден');
         const users = await response.json();
         renderRows(users);
       } catch (error) {
+        // Резервные данные, если файл data/users.json не создан или недоступен
         renderRows([
           { id: 1, name: 'Иван Иванов', role: 'Администратор', status: 'Активен', badge: 'text-bg-success' },
           { id: 2, name: 'Анна Смирнова', role: 'Менеджер', status: 'Ожидает', badge: 'text-bg-warning' },
@@ -122,10 +122,8 @@
 
       const isAlreadySelected = clickedRow.classList.contains('table-primary');
 
-      // Снимаем выделение со всех строк
       tbody.querySelectorAll('tr').forEach(row => row.classList.remove('table-primary'));
 
-      // Если строка не была выбрана — подсвечиваем её (повторный клик снимает выделение)
       if (!isAlreadySelected) {
         clickedRow.classList.add('table-primary');
       }
