@@ -1,78 +1,26 @@
-<!doctype html>
-<html lang="ru">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Админ-панель | AdminLTE 4</title>
-    <link rel="stylesheet" href="css/adminlte.min.css" />
-  </head>
-  <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
-    <div class="app-wrapper">
-      <!-- Верхняя шапка -->
-      <nav class="app-header navbar navbar-expand bg-body">
-        <div class="container-fluid">
-          <ul class="navbar-nav">
-            <li class="nav-item">
-              <a class="nav-link" data-lte-toggle="sidebar" href="#" role="button">☰</a>
-            </li>
-            <li class="nav-item d-none d-md-block">
-              <span class="nav-link text-muted">Панель управления</span>
-            </li>
-          </ul>
-        </div>
-      </nav>
-
-      <!-- Боковое меню -->
-      <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
-        <div class="sidebar-brand">
-          <a href="#dashboard" class="brand-link">
-            <span class="brand-text fw-light">Моя Админка</span>
-          </a>
-        </div>
-        <div class="sidebar-wrapper">
-          <nav class="mt-2">
-            <ul class="nav sidebar-menu flex-column" role="menu">
-              <li class="nav-item">
-                <!-- Имя в href="#..." должно совпадать с именем файла в папке views/ -->
-                <a href="#dashboard" class="nav-link">
-                  <p>Дашборд</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#tables" class="nav-link">
-                  <p>Таблицы</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#settings" class="nav-link">
-                  <p>Настройки</p>
-                </a>
-              </li>
-            </ul>
-          </nav>
-        </div>
-      </aside>
-
-      <!-- Центральная часть -->
-      <main class="app-main" id="main-content"></main>
-
-      <!-- Подвал -->
-      <footer class="app-footer">
-        <strong>AdminLTE 4</strong> на GitHub Pages.
-      </footer>
-    </div>
-
-    <script src="js/bootstrap.bundle.min.js"></script>
-    <script src="js/adminlte.min.js"></script>
-
-    <!-- Скрипт подгрузки с запоминанием раздела через URL-хэш -->
+    <!-- Скрипт подгрузки с запоминанием раздела и запуском JS внутри вьюх -->
     <script>
       const mainContent = document.getElementById('main-content');
       const menuLinks = document.querySelectorAll('.sidebar-menu .nav-link');
 
+      // Функция для принудительного запуска <script> внутри вставленного HTML
+      function executeScripts(container) {
+        const scripts = container.querySelectorAll('script');
+        scripts.forEach(oldScript => {
+          const newScript = document.createElement('script');
+          // Копируем атрибуты (например, src), если они есть
+          Array.from(oldScript.attributes).forEach(attr => {
+            newScript.setAttribute(attr.name, attr.value);
+          });
+          // Копируем сам JS-код
+          newScript.textContent = oldScript.textContent;
+          // Заменяем старый неактивный тег на новый рабочий
+          oldScript.parentNode.replaceChild(newScript, oldScript);
+        });
+      }
+
       // Загрузка HTML-фрагмента и обновление меню
       async function loadView(viewName) {
-        // Если имя пустое, открываем dashboard по умолчанию
         const page = viewName || 'dashboard';
 
         // Подсвечиваем активный пункт в меню
@@ -84,26 +32,21 @@
         try {
           const response = await fetch(`views/${page}.html`);
           if (!response.ok) throw new Error(`Страница views/${page}.html не найдена`);
+          
+          // 1. Вставляем HTML
           mainContent.innerHTML = await response.text();
+          
+          // 2. Запускаем все скрипты, которые были внутри этого файла
+          executeScripts(mainContent);
         } catch (error) {
           mainContent.innerHTML = `<div class="p-4 text-danger">Ошибка: ${error.message}</div>`;
         }
       }
 
-      // Получаем имя раздела из адресной строки (например, из "#tables" берем "tables")
       function getCurrentRoute() {
         return window.location.hash.replace('#', '');
       }
 
-      // Слушаем изменение хэша (срабатывает при клике по ссылкам #... и кнопке "Назад" в браузере)
-      window.addEventListener('hashchange', () => {
-        loadView(getCurrentRoute());
-      });
-
-      // При первом открытии или обновлении (F5) загружаем раздел из адресной строки
-      window.addEventListener('DOMContentLoaded', () => {
-        loadView(getCurrentRoute());
-      });
+      window.addEventListener('hashchange', () => loadView(getCurrentRoute()));
+      window.addEventListener('DOMContentLoaded', () => loadView(getCurrentRoute()));
     </script>
-  </body>
-</html>
