@@ -1,7 +1,11 @@
 <div class="app-content-header">
   <div class="container-fluid d-flex justify-content-between align-items-center">
     <h3 class="mb-0">Таблицы данных</h3>
-    <button id="reloadDataBtn" class="btn btn-sm btn-outline-primary">Обновить данные</button>
+    <div class="d-flex align-items-center gap-2">
+      <!-- Индикатор статуса данных (Онлайн / Из кэша) -->
+      <span id="dataStatusBadge" class="badge text-bg-secondary">Ожидание...</span>
+      <button id="reloadDataBtn" class="btn btn-sm btn-outline-primary">Обновить с сервера</button>
+    </div>
   </div>
 </div>
 
@@ -30,7 +34,7 @@
             <tr>
               <th style="width: 60px;">ID</th>
               <th>Имя</th>
-              <th>Роль</th>
+              <th>Email / Роль</th>
               <th>Статус</th>
             </tr>
           </thead>
@@ -45,21 +49,22 @@
 
 <script>
   {
+    // Укажите здесь адрес вашего REST API
+    const API_URL = 'https://typicode.com';
+    const LOCAL_STORAGE_KEY = 'cached_users_table';
+
     const tbody = document.getElementById('usersTableBody');
     const searchInput = document.getElementById('tableSearch');
     const reloadBtn = document.getElementById('reloadDataBtn');
     const rowActions = document.getElementById('rowActions');
     const selectedInfo = document.getElementById('selectedInfo');
     const deleteSelectedBtn = document.getElementById('deleteSelectedBtn');
+    const dataStatusBadge = document.getElementById('dataStatusBadge');
 
-    // Обновление панели действий в зависимости от выбранной строки
     function updateSelectionUI() {
       const selectedRow = tbody.querySelector('tr.table-primary');
-      
       if (selectedRow && selectedRow.style.display !== 'none') {
-        const id = selectedRow.dataset.id;
-        const name = selectedRow.dataset.name;
-        selectedInfo.textContent = `Выбрано: ${name} (ID: ${id})`;
+        selectedInfo.textContent = `Выбрано: ${selectedRow.dataset.name} (ID: ${selectedRow.dataset.id})`;
         rowActions.classList.remove('d-none');
         rowActions.classList.add('d-flex');
       } else {
@@ -68,10 +73,9 @@
       }
     }
 
-    // Отрисовка строк
     function renderRows(users) {
       if (!users || users.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="4" class="text-center py-4 text-muted">Нет данных для отображения</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="4" class="text-center py-4 text-muted">Нет данных</td></tr>';
         updateSelectionUI();
         return;
       }
@@ -80,68 +84,83 @@
         <tr data-id="${user.id}" data-name="${user.name}" style="cursor: pointer; user-select: none;">
           <td>${user.id}</td>
           <td>${user.name}</td>
-          <td>${user.role}</td>
-          <td><span class="badge ${user.badge || 'text-bg-secondary'}">${user.status}</span></td>
+          <td>${user.email || user.role || '-'}</td>
+          <td><span class="badge text-bg-success">Активен</span></td>
         </tr>
       `).join('');
 
       updateSelectionUI();
     }
 
-    // Загрузка данных (чистый путь для работы из кэша без интернета)
+    // Загрузка данных из REST API с резервным чтением из памяти телефона
     async function loadTableData() {
+      dataStatusBadge.className = 'badge text-bg-secondary';
+      dataStatusBadge.textContent = 'Загрузка...';
+
       tbody.innerHTML = `
         <tr>
           <td colspan="4" class="text-center py-4 text-muted">
             <div class="spinner-border spinner-border-sm me-2" role="status"></div>
-            Загрузка данных...
+            Запрос к серверу...
           </td>
         </tr>
       `;
 
       try {
-        const response = await fetch('data/users.json');
-        if (!response.ok) throw new Error('Файл не найден');
+        const response = await fetch(API_URL);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        
         const users = await response.json();
+        
+        // Сохраняем свежие данные в localStorage для мгновенного доступа без сети
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(users));
+        
+        dataStatusBadge.className = 'badge text-bg-success';
+        dataStatusBadge.textContent = 'Онлайн (свежие)';
         renderRows(users);
+
       } catch (error) {
-        // Резервные данные, если файл data/users.json не создан или недоступен
-        renderRows([
-          { id: 1, name: 'Иван Иванов', role: 'Администратор', status: 'Активен', badge: 'text-bg-success' },
-          { id: 2, name: 'Анна Смирнова', role: 'Менеджер', status: 'Ожидает', badge: 'text-bg-warning' },
-          { id: 3, name: 'Петр Сидоров', role: 'Пользователь', status: 'Заблокирован', badge: 'text-bg-danger' },
-          { id: 4, name: 'Елена Козлова', role: 'Редактор', status: 'Активен', badge: 'text-bg-success' }
-        ]);
+        // Если интернета нет или сервер недоступен — берем данные из localStorage
+        const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
+        if (savedData) {
+          dataStatusBadge.className = 'badge text-bg-warning';
+          dataStatusBadge.textContent = 'Офлайн (из памяти)';
+          renderRows(JSON.parse(savedData));
+        } else {
+          dataStatusBadge.className = 'badge text-bg-danger';
+          dataStatusBadge.textContent = 'Нет сети и кэша';
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="4" class="text-center py-4 text-danger">
+                Нет подключения к интернету, а сохраненных данных еще нет. Подключитесь к сети и нажмите «Обновить с сервера».
+              </td>
+            </tr>
+          `;
+        }
       }
     }
 
-    // Клик по строке (одиночный выбор)
+    // Одиночный выбор строки по клику
     tbody.addEventListener('click', (event) => {
       const clickedRow = event.target.closest('tr');
       if (!clickedRow || !clickedRow.dataset.id) return;
 
       const isAlreadySelected = clickedRow.classList.contains('table-primary');
-
       tbody.querySelectorAll('tr').forEach(row => row.classList.remove('table-primary'));
-
       if (!isAlreadySelected) {
         clickedRow.classList.add('table-primary');
       }
-
       updateSelectionUI();
     });
 
-    // Действие с выбранной строкой
     deleteSelectedBtn.addEventListener('click', () => {
       const selectedRow = tbody.querySelector('tr.table-primary');
       if (selectedRow) {
-        console.log('Удаляем запись с ID:', selectedRow.dataset.id);
         selectedRow.remove();
         updateSelectionUI();
       }
     });
 
-    // Поиск по таблице
     searchInput.addEventListener('input', function () {
       const query = this.value.toLowerCase();
       tbody.querySelectorAll('tr').forEach(row => {
