@@ -4,6 +4,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Админ-панель | AdminLTE 4</title>
+    
+    <!-- Настройки PWA для Android -->
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#343a40" />
+    <link rel="apple-touch-icon" href="icon-512.png" />
+
+    <!-- Локальные стили AdminLTE -->
     <link rel="stylesheet" href="css/adminlte.min.css" />
   </head>
   <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
@@ -52,7 +59,7 @@
         </div>
       </aside>
 
-      <!-- Центральная часть -->
+      <!-- Центральная часть (сюда подгружаются вьюхи) -->
       <main class="app-main" id="main-content">
         <div class="p-4 text-muted">Загрузка раздела...</div>
       </main>
@@ -63,14 +70,16 @@
       </footer>
     </div>
 
+    <!-- Локальные скрипты Bootstrap и AdminLTE -->
     <script src="js/bootstrap.bundle.min.js"></script>
     <script src="js/adminlte.min.js"></script>
 
-    <!-- Скрипт подгрузки с запоминанием раздела и запуском JS внутри вьюх -->
+    <!-- Скрипт роутинга и запуска JS внутри подгружаемых страниц -->
     <script>
       const mainContent = document.getElementById('main-content');
       const menuLinks = document.querySelectorAll('.sidebar-menu .nav-link');
 
+      // Принудительный запуск тегов <script> внутри загруженного HTML
       function executeScripts(container) {
         const scripts = container.querySelectorAll('script');
         scripts.forEach(oldScript => {
@@ -83,6 +92,7 @@
         });
       }
 
+      // Загрузка HTML-фрагмента и подсветка активного пункта меню
       async function loadView(viewName) {
         const page = viewName || 'dashboard';
 
@@ -108,6 +118,17 @@
 
       window.addEventListener('hashchange', () => loadView(getCurrentRoute()));
       window.addEventListener('DOMContentLoaded', () => loadView(getCurrentRoute()));
+    </script>
+
+    <!-- Регистрация Service Worker для автономной работы (офлайн) -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./sw.js')
+            .then(() => console.log('Офлайн-режим (Service Worker) активирован'))
+            .catch(err => console.error('Ошибка Service Worker:', err));
+        });
+      }
     </script>
   </body>
 </html>
