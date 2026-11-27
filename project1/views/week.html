@@ -1,0 +1,116 @@
+<div class="app-content-header">
+  <div class="container-fluid d-flex flex-wrap justify-content-between align-items-center gap-2">
+    <h3 class="mb-0">Недельное расписание</h3>
+    <span id="weekNow" class="badge text-bg-secondary">—</span>
+  </div>
+</div>
+
+<div class="app-content">
+  <div class="container-fluid">
+    <div id="weekError" class="d-none alert alert-danger"></div>
+
+    <div class="card">
+      <div class="card-header d-flex flex-wrap justify-content-between align-items-center gap-2">
+        <h3 class="card-title mb-0">Сетка 7 × 24</h3>
+        <span class="text-muted small">Только просмотр · демо-данные</span>
+      </div>
+      <div class="card-body p-0">
+        <div class="table-responsive week-scroll">
+          <table class="table table-sm week-grid mb-0" id="weekTable">
+            <thead>
+              <tr id="weekHead"></tr>
+            </thead>
+            <tbody id="weekBody">
+              <tr><td class="text-center text-muted py-3">Загрузка...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="d-flex flex-wrap gap-3" id="weekLegend"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  (async function () {
+    const DS = window.DataSource;
+    const esc = DS.escapeHtml;
+    const DAY_SHORT = { 1: 'Пн', 2: 'Вт', 3: 'Ср', 4: 'Чт', 5: 'Пт', 6: 'Сб', 7: 'Вс' };
+
+    function hexToRgba(hex, alpha) {
+      const m = hex.replace('#', '');
+      const r = parseInt(m.slice(0, 2), 16);
+      const g = parseInt(m.slice(2, 4), 16);
+      const b = parseInt(m.slice(4, 6), 16);
+      return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+    }
+
+    try {
+      const [week, channels, rtc] = await Promise.all([
+        DS.getWeek(), DS.getChannels(), DS.getRtc()
+      ]);
+
+      // Шапка: названия дней + часы
+      const head = document.getElementById('weekHead');
+      let headHtml = '<th class="day-col">День</th>';
+      for (let h = 0; h < 24; h++) {
+        headHtml += `<th class="hour-col">${h}</th>`;
+      }
+      head.innerHTML = headHtml;
+
+      // Тело: строки по дням, ячейки по часам
+      const body = document.getElementById('weekBody');
+      let rows = '';
+      for (let day = 1; day <= 7; day++) {
+        const dayData = week[String(day)] || {};
+        rows += `<tr><th class="day-col">${DAY_SHORT[day]}<br><small class="text-muted">${DS.dayName(day)}</small></th>`;
+        for (let hour = 0; hour < 24; hour++) {
+          const cell = dayData[String(hour)];
+          const isNow = (day === rtc.dayOfTheWeek && hour === rtc.hour);
+          const nowClass = isNow ? ' week-cell--now' : '';
+
+          if (cell && cell.enabled && cell.channel >= 1 && cell.channel <= 16) {
+            const color = DS.channelColor(cell.channel);
+            const ch = channels[String(cell.channel)];
+            const chName = ch ? ch.name : `Канал ${cell.channel}`;
+            const title = `${DAY_SHORT[day]} ${String(hour).padStart(2, '0')}:00 — Канал ${cell.channel} (${chName}), ${cell.duration} мин`;
+            rows += `<td class="week-cell${nowClass}" style="background:${hexToRgba(color, 0.18)};border-left:3px solid ${color}" title="${esc(title)}">` +
+                    `<span style="color:${color}">${cell.channel}</span></td>`;
+          } else {
+            rows += `<td class="week-cell week-cell--empty${nowClass}"></td>`;
+          }
+        }
+        rows += '</tr>';
+      }
+      body.innerHTML = rows;
+
+      // Подпись «сейчас»
+      const nowTask = DS.currentTask(rtc, week, channels);
+      const nowEl = document.getElementById('weekNow');
+      if (nowTask) {
+        nowEl.className = 'badge text-bg-success';
+        nowEl.textContent = `Сейчас: ${DS.dayName(rtc.dayOfTheWeek)}, ${String(rtc.hour).padStart(2, '0')}:00 — Канал ${nowTask.channel} (${nowTask.name})`;
+      } else {
+        nowEl.className = 'badge text-bg-secondary';
+        nowEl.textContent = `Сейчас: ${DS.dayName(rtc.dayOfTheWeek)}, ${String(rtc.hour).padStart(2, '0')}:00 — задание не активно`;
+      }
+
+      // Легенда каналов
+      const legend = document.getElementById('weekLegend');
+      let legendHtml = '';
+      for (let id = 1; id <= 16; id++) {
+        const ch = channels[String(id)];
+        const color = DS.channelColor(id);
+        const muted = ch && ch.enabled ? '' : ' text-muted text-decoration-line-through';
+        legendHtml += `<span class="legend-item${muted}"><span class="legend-swatch" style="background:${color}"></span>${esc(ch ? ch.name : 'Канал ' + id)}</span>`;
+      }
+      legend.innerHTML = legendHtml;
+    } catch (e) {
+      const box = document.getElementById('weekError');
+      box.classList.remove('d-none');
+      box.textContent = 'Ошибка загрузки данных: ' + e.message;
+    }
+  })();
+</script>

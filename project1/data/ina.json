@@ -1,0 +1,752 @@
+{
+    "Ina":  {
+                "address":  64,
+                "channels":  [
+                                 {
+                                     "enabled":  true,
+                                     "shunt":  10,
+                                     "voltage":  12.6,
+                                     "current":  0.35,
+                                     "power":  4.41
+                                 },
+                                 {
+                                     "enabled":  true,
+                                     "shunt":  10,
+                                     "voltage":  12.5,
+                                     "current":  0.12,
+                                     "power":  1.5
+                                 },
+                                 {
+                                     "enabled":  true,
+                                     "shunt":  10,
+                                     "voltage":  12.7,
+                                     "current":  0,
+                                     "power":  0
+                                 }
+                             ]
+            },
+    "InaHistory":  {
+                       "hours":  [
+                                     {
+                                         "date":  "2026-11-27",
+                                         "hour":  0,
+                                         "channels":  [
+                                                          {
+                                                              "vMin":  12.45,
+                                                              "vMax":  12.75,
+                                                              "iMin":  0.3,
+                                                              "iMax":  0.42,
+                                                              "pMin":  3.73,
+                                                              "pMax":  5.36
+                                                          },
+                                                          {
+                                                              "vMin":  12.35,
+                                                              "vMax":  12.65,
+                                                              "iMin":  0.07,
+                                                              "iMax":  0.19,
+                                                              "pMin":  0.86,
+                                                              "pMax":  2.4
+                                                          },
+                                                          {
+                                                              "vMin":  12.55,
+                                                              "vMax":  12.85,
+                                                              "iMin":  0,
+                                                              "iMax":  0.07,
+                                                              "pMin":  0,
+                                                              "pMax":  0.9
+                                                          }
+                                                      ]
+                                     },
+                                     {
+                                         "date":  "2026-11-27",
+                                         "hour":  1,
+                                         "channels":  [
+                                                          {
+                                                              "vMin":  12.43,
+                                                              "vMax":  12.75,
+                                                              "iMin":  0.29,
+                                                              "iMax":  0.42,
+                                                              "pMin":  3.6,
+                                                              "pMax":  5.36
+                                                          },
+                                                          {
+                                                              "vMin":  12.33,
+                                                              "vMax":  12.65,
+                                                              "iMin":  0.06,
+                                                              "iMax":  0.19,
+                                                              "pMin":  0.74,
+                                                              "pMax":  2.4
+                                                          },
+                                                          {
+                                                              "vMin":  12.53,
+                                                              "vMax":  12.85,
+                                                              "iMin":  0,
+                                                              "iMax":  0.07,
+                                                              "pMin":  0,
+                                                              "pMax":  0.9
+                                                          }
+                                                      ]
+                                     },
+                                     {
+                                         "date":  "2026-11-27",
+                                         "hour":  2,
+                                         "channels":  [
+                                                          {
+                                                              "vMin":  12.42,
+                                                              "vMax":  12.74,
+                                                              "iMin":  0.28,
+                                                              "iMax":  0.42,
+                                                              "pMin":  3.48,
+                                                              "pMax":  5.35
+                                                          },
+                                                          {
+                                                              "vMin":  12.32,
+                                                              "vMax":  12.64,
+                                                              "iMin":  0.05,
+                                                              "iMax":  0.19,
+                                                              "pMin":  0.62,
+                                                              "pMax":  2.4
+                                                          },
+                                                          {
+                                                              "vMin":  12.52,
+                                                              "vMax":  12.84,
+                                                              "iMin":  0,
+                                                              "iMax":  0.07,
+                                                              "pMin":  0,
+                                                              "pMax":  0.9
+                                                          }
+                                                      ]
+                                     },
+                                     {
+                                         "date":  "2026-11-27",
+                                         "hour":  3,
+                                         "channels":  [
+                                                          {
+                                                              "vMin":  12.41,
+                                                              "vMax":  12.74,
+                                                              "iMin":  0.28,
+                                                              "iMax":  0.41,
+                                                              "pMin":  3.47,
+                                                              "pMax":  5.22
+                                                          },
+                                                          {
+                                                              "vMin":  12.31,
+                                                              "vMax":  12.64,
+                                                              "iMin":  0.05,
+                                                              "iMax":  0.18,
+                                                              "pMin":  0.62,
+                                                              "pMax":  2.28
+                                                          },
+                                                          {
+                                                              "vMin":  12.51,
+                                                              "vMax":  12.84,
+                                                              "iMin":  0,
+                                                              "iMax":  0.06,
+                                                              "pMin":  0,
+                                                              "pMax":  0.77
+                                                          }
+                                                      ]
+                                     },
+                                     {
+                                         "date":  "2026-11-27",
+                                         "hour":  4,
+                                         "channels":  [
+                                                          {
+                                                              "vMin":  12.4,
+                                                              "vMax":  12.73,
+                                                              "iMin":  0.28,
+                                                              "iMax":  0.4,
+                                                              "pMin":  3.47,
+                                                              "pMax":  5.09
+                                                          },
+                                                          {
+                                                              "vMin":  12.3,
+                                                              "vMax":  12.63,
+                                                              "iMin":  0.05,
+                                                              "iMax":  0.17,
+                                                              "pMin":  0.62,
+                                                              "pMax":  2.15
+                                                          },
+                                                          {
+                                                              "vMin":  12.5,
+                                                              "vMax":  12.83,
+                                                              "iMin":  0,
+                                                              "iMax":  0.05,
+                                                              "pMin":  0,
+                                                              "pMax":  0.64
+                                                          }
+                                                      ]
+                                     },
+                                     {
+                                         "date":  "2026-11-27",
+                                         "hour":  5,
+                                         "channels":  [
+                                                          {
+                                                              "vMin":  12.4,
+                                                              "vMax":  12.72,
+                                                              "iMin":  0.29,
+                                                              "iMax":  0.4,
+                                                              "pMin":  3.6,
+                                                              "pMax":  5.09
+                                                          },
+                                                          {
+                                                              "vMin":  12.3,
+                                                              "vMax":  12.62,
+                                                              "iMin":  0.06,
+                                                              "iMax":  0.17,
+                                                              "pMin":  0.74,
+                                                              "pMax":  2.15
+                                                          },
+                                                          {
+                                                              "vMin":  12.5,
+                                                              "vMax":  12.82,
+                                                              "iMin":  0,
+                                                              "iMax":  0.05,
+                                                              "pMin":  0,
+                                                              "pMax":  0.64
+                                                          }
+                                                      ]
+                                     },
+                                     {
+                                         "date":  "2026-11-27",
+                                         "hour":  6,
+                                         "channels":  [
+                                                          {
+                                                              "vMin":  12.4,
+                                                              "vMax":  12.7,
+                                                              "iMin":  0.3,
+                                                              "iMax":  0.39,
+                                                              "pMin":  3.72,
+                                                              "pMax":  4.95
+                                                          },
+                                                          {
+                                                              "vMin":  12.3,
+                                                              "vMax":  12.6,
+                                                              "iMin":  0.07,
+                                                              "iMax":  0.16,
+                                                              "pMin":  0.86,
+                                                              "pMax":  2.02
+                                                          },
+                                                          {
+                                                              "vMin":  12.5,
+                                                              "vMax":  12.8,
+                                                              "iMin":  0,
+                                                              "iMax":  0.04,
+                                                              "pMin":  0,
+                                                              "pMax":  0.51
+                                                          }
+                                                      ]
+                                     },
+                                     {
+                                         "date":  "2026-11-27",
+                                         "hour":  7,
+                                         "channels":  [
+                                                          {
+                                                              "vMin":  12.41,
+                                                              "vMax":  12.69,
+                                                              "iMin":  0.31,
+                                                              "iMax":  0.39,
+                                                              "pMin":  3.85,
+                                                              "pMax":  4.95
+                                                          },
+                                                          {
+                                                              "vMin":  12.31,
+                                                              "vMax":  12.59,
+                                                              "iMin":  0.08,
+                                                              "iMax":  0.16,
+                                                              "pMin":  0.98,
+                                                              "pMax":  2.01
+                                                          },
+                                                          {
+                                                              "vMin":  12.51,
+                                                              "vMax":  12.79,
+                                                              "iMin":  0,
+                                                              "iMax":  0.04,
+                                                              "pMin":  0,
+                                                              "pMax":  0.51
+                                                          }
+                                                      ]
+                                     },
+                                     {
+                                         "date":  "2026-11-27",
+                                         "hour":  8,
+                                         "channels":  [
+                                                          {
+                                                              "vMin":  12.43,
+                                                              "vMax":  12.68,
+                                                              "iMin":  0.32,
+                                                              "iMax":  0.38,
+                                                              "pMin":  3.98,
+                                                              "pMax":  4.82
+                                                          },
+                                                          {
+                                                              "vMin":  12.33,
+                                                              "vMax":  12.58,
+                                                              "iMin":  0.09,
+                                                              "iMax":  0.15,
+                                                              "pMin":  1.11,
+                                                              "pMax":  1.89
+                                                          },
+                                                          {
+                                                              "vMin":  12.53,
+                                                              "vMax":  12.78,
+                                                              "iMin":  0,
+                                                              "iMax":  0.03,
+                                                              "pMin":  0,
+                                                              "pMax":  0.38
+                                                          }
+                                                      ]
+                                     },
+                                     {
+                                         "date":  "2026-11-27",
+                                         "hour":  9,
+                                         "channels":  [
+                                                          {
+                                                              "vMin":  12.44,
+                                                              "vMax":  12.67,
+                                                              "iMin":  0.32,
+                                                              "iMax":  0.38,
+                                                              "pMin":  3.98,
+                                                              "pMax":  4.81
+                                                          },
+                                                          {
+                                                              "vMin":  12.34,
+                                                              "vMax":  12.57,
+                                                              "iMin":  0.09,
+                                                              "iMax":  0.15,
+                                                              "pMin":  1.11,
+                                                              "pMax":  1.89
+                                                          },
+                                                          {
+                                                              "vMin":  12.54,
+                                                              "vMax":  12.77,
+                                                              "iMin":  0,
+                                                              "iMax":  0.03,
+                                                              "pMin":  0,
+                                                              "pMax":  0.38
+                                                          }
+                                                      ]
+                                     },
+                                     {
+                                         "date":  "2026-11-27",
+                                         "hour":  10,
+                                         "channels":  [
+                                                          {
+                                                              "vMin":  12.46,
+                                                              "vMax":  12.66,
+                                                              "iMin":  0.32,
+                                                              "iMax":  0.38,
+                                                              "pMin":  3.99,
+                                                              "pMax":  4.81
+                                                          },
+                                                          {
+                                                              "vMin":  12.36,
+                                                              "vMax":  12.56,
+                                                              "iMin":  0.09,
+                                                              "iMax":  0.15,
+                                                              "pMin":  1.11,
+                                                              "pMax":  1.88
+                                                          },
+                                                          {
+                                                              "vMin":  12.56,
+                                                              "vMax":  12.76,
+                                                              "iMin":  0,
+                                                              "iMax":  0.03,
+                                                              "pMin":  0,
+                                                              "pMax":  0.38
+                                                          }
+                                                      ]
+                                     },
+                                     {
+                                         "date":  "2026-11-27",
+                                         "hour":  11,
+                                         "channels":  [
+                                                          {
+                                                              "vMin":  12.48,
+                                                              "vMax":  12.65,
+                                                              "iMin":  0.31,
+                                                              "iMax":  0.38,
+                                                              "pMin":  3.87,
+                                                              "pMax":  4.81
+                                                          },
+                                                          {
+                                                              "vMin":  12.38,
+                                                              "vMax":  12.55,
+                                                              "iMin":  0.08,
+                                                              "iMax":  0.15,
+                                                              "pMin":  0.99,
+                                                              "pMax":  1.88
+                                                          },
+                                                          {
+                                                              "vMin":  12.58,
+                                                              "vMax":  12.75,
+                                                              "iMin":  0,
+                                                              "iMax":  0.03,
+                                                              "pMin":  0,
+                                                              "pMax":  0.38
+                                                          }
+                                                      ]
+                                     },
+                                     {
+                                         "date":  "2026-11-27",
+                                         "hour":  12,
+                                         "channels":  [
+                                                          {
+                                                              "vMin":  12.49,
+                                                              "vMax":  12.65,
+                                                              "iMin":  0.31,
+                                                              "iMax":  0.39,
+                                                              "pMin":  3.87,
+                                                              "pMax":  4.93
+                                                          },
+                                                          {
+                                                              "vMin":  12.39,
+                                                              "vMax":  12.55,
+                                                              "iMin":  0.08,
+                                                              "iMax":  0.16,
+                                                              "pMin":  0.99,
+                                                              "pMax":  2.01
+                                                          },
+                                                          {
+                                                              "vMin":  12.59,
+                                                              "vMax":  12.75,
+                                                              "iMin":  0,
+                                                              "iMax":  0.04,
+                                                              "pMin":  0,
+                                                              "pMax":  0.51
+                                                          }
+                                                      ]
+                                     },
+                                     {
+                                         "date":  "2026-11-27",
+                                         "hour":  13,
+                                         "channels":  [
+                                                          {
+                                                              "vMin":  12.5,
+                                                              "vMax":  12.65,
+                                                              "iMin":  0.3,
+                                                              "iMax":  0.39,
+                                                              "pMin":  3.75,
+                                                              "pMax":  4.93
+                                                          },
+                                                          {
+                                                              "vMin":  12.4,
+                                                              "vMax":  12.55,
+                                                              "iMin":  0.07,
+                                                              "iMax":  0.16,
+                                                              "pMin":  0.87,
+                                                              "pMax":  2.01
+                                                          },
+                                                          {
+                                                              "vMin":  12.6,
+                                                              "vMax":  12.75,
+                                                              "iMin":  0,
+                                                              "iMax":  0.04,
+                                                              "pMin":  0,
+                                                              "pMax":  0.51
+                                                          }
+                                                      ]
+                                     },
+                                     {
+                                         "date":  "2026-11-27",
+                                         "hour":  14,
+                                         "channels":  [
+                                                          {
+                                                              "vMin":  12.5,
+                                                              "vMax":  12.65,
+                                                              "iMin":  0.29,
+                                                              "iMax":  0.4,
+                                                              "pMin":  3.62,
+                                                              "pMax":  5.06
+                                                          },
+                                                          {
+                                                              "vMin":  12.4,
+                                                              "vMax":  12.55,
+                                                              "iMin":  0.06,
+                                                              "iMax":  0.17,
+                                                              "pMin":  0.74,
+                                                              "pMax":  2.13
+                                                          },
+                                                          {
+                                                              "vMin":  12.6,
+                                                              "vMax":  12.75,
+                                                              "iMin":  0,
+                                                              "iMax":  0.05,
+                                                              "pMin":  0,
+                                                              "pMax":  0.64
+                                                          }
+                                                      ]
+                                     },
+                                     {
+                                         "date":  "2026-11-27",
+                                         "hour":  15,
+                                         "channels":  [
+                                                          {
+                                                              "vMin":  12.5,
+                                                              "vMax":  12.66,
+                                                              "iMin":  0.28,
+                                                              "iMax":  0.41,
+                                                              "pMin":  3.5,
+                                                              "pMax":  5.19
+                                                          },
+                                                          {
+                                                              "vMin":  12.4,
+                                                              "vMax":  12.56,
+                                                              "iMin":  0.05,
+                                                              "iMax":  0.18,
+                                                              "pMin":  0.62,
+                                                              "pMax":  2.26
+                                                          },
+                                                          {
+                                                              "vMin":  12.6,
+                                                              "vMax":  12.76,
+                                                              "iMin":  0,
+                                                              "iMax":  0.06,
+                                                              "pMin":  0,
+                                                              "pMax":  0.77
+                                                          }
+                                                      ]
+                                     },
+                                     {
+                                         "date":  "2026-11-27",
+                                         "hour":  16,
+                                         "channels":  [
+                                                          {
+                                                              "vMin":  12.49,
+                                                              "vMax":  12.67,
+                                                              "iMin":  0.28,
+                                                              "iMax":  0.41,
+                                                              "pMin":  3.5,
+                                                              "pMax":  5.19
+                                                          },
+                                                          {
+                                                              "vMin":  12.39,
+                                                              "vMax":  12.57,
+                                                              "iMin":  0.05,
+                                                              "iMax":  0.18,
+                                                              "pMin":  0.62,
+                                                              "pMax":  2.26
+                                                          },
+                                                          {
+                                                              "vMin":  12.59,
+                                                              "vMax":  12.77,
+                                                              "iMin":  0,
+                                                              "iMax":  0.06,
+                                                              "pMin":  0,
+                                                              "pMax":  0.77
+                                                          }
+                                                      ]
+                                     },
+                                     {
+                                         "date":  "2026-11-27",
+                                         "hour":  17,
+                                         "channels":  [
+                                                          {
+                                                              "vMin":  12.48,
+                                                              "vMax":  12.68,
+                                                              "iMin":  0.28,
+                                                              "iMax":  0.42,
+                                                              "pMin":  3.49,
+                                                              "pMax":  5.33
+                                                          },
+                                                          {
+                                                              "vMin":  12.38,
+                                                              "vMax":  12.58,
+                                                              "iMin":  0.05,
+                                                              "iMax":  0.19,
+                                                              "pMin":  0.62,
+                                                              "pMax":  2.39
+                                                          },
+                                                          {
+                                                              "vMin":  12.58,
+                                                              "vMax":  12.78,
+                                                              "iMin":  0,
+                                                              "iMax":  0.07,
+                                                              "pMin":  0,
+                                                              "pMax":  0.89
+                                                          }
+                                                      ]
+                                     },
+                                     {
+                                         "date":  "2026-11-27",
+                                         "hour":  18,
+                                         "channels":  [
+                                                          {
+                                                              "vMin":  12.46,
+                                                              "vMax":  12.69,
+                                                              "iMin":  0.29,
+                                                              "iMax":  0.42,
+                                                              "pMin":  3.61,
+                                                              "pMax":  5.33
+                                                          },
+                                                          {
+                                                              "vMin":  12.36,
+                                                              "vMax":  12.59,
+                                                              "iMin":  0.06,
+                                                              "iMax":  0.19,
+                                                              "pMin":  0.74,
+                                                              "pMax":  2.39
+                                                          },
+                                                          {
+                                                              "vMin":  12.56,
+                                                              "vMax":  12.79,
+                                                              "iMin":  0,
+                                                              "iMax":  0.07,
+                                                              "pMin":  0,
+                                                              "pMax":  0.9
+                                                          }
+                                                      ]
+                                     },
+                                     {
+                                         "date":  "2026-11-27",
+                                         "hour":  19,
+                                         "channels":  [
+                                                          {
+                                                              "vMin":  12.45,
+                                                              "vMax":  12.7,
+                                                              "iMin":  0.3,
+                                                              "iMax":  0.42,
+                                                              "pMin":  3.73,
+                                                              "pMax":  5.33
+                                                          },
+                                                          {
+                                                              "vMin":  12.35,
+                                                              "vMax":  12.6,
+                                                              "iMin":  0.07,
+                                                              "iMax":  0.19,
+                                                              "pMin":  0.86,
+                                                              "pMax":  2.39
+                                                          },
+                                                          {
+                                                              "vMin":  12.55,
+                                                              "vMax":  12.8,
+                                                              "iMin":  0,
+                                                              "iMax":  0.07,
+                                                              "pMin":  0,
+                                                              "pMax":  0.9
+                                                          }
+                                                      ]
+                                     },
+                                     {
+                                         "date":  "2026-11-27",
+                                         "hour":  20,
+                                         "channels":  [
+                                                          {
+                                                              "vMin":  12.43,
+                                                              "vMax":  12.71,
+                                                              "iMin":  0.31,
+                                                              "iMax":  0.42,
+                                                              "pMin":  3.85,
+                                                              "pMax":  5.34
+                                                          },
+                                                          {
+                                                              "vMin":  12.33,
+                                                              "vMax":  12.61,
+                                                              "iMin":  0.08,
+                                                              "iMax":  0.19,
+                                                              "pMin":  0.99,
+                                                              "pMax":  2.4
+                                                          },
+                                                          {
+                                                              "vMin":  12.53,
+                                                              "vMax":  12.81,
+                                                              "iMin":  0,
+                                                              "iMax":  0.07,
+                                                              "pMin":  0,
+                                                              "pMax":  0.9
+                                                          }
+                                                      ]
+                                     },
+                                     {
+                                         "date":  "2026-11-27",
+                                         "hour":  21,
+                                         "channels":  [
+                                                          {
+                                                              "vMin":  12.42,
+                                                              "vMax":  12.73,
+                                                              "iMin":  0.32,
+                                                              "iMax":  0.42,
+                                                              "pMin":  3.97,
+                                                              "pMax":  5.35
+                                                          },
+                                                          {
+                                                              "vMin":  12.32,
+                                                              "vMax":  12.63,
+                                                              "iMin":  0.09,
+                                                              "iMax":  0.19,
+                                                              "pMin":  1.11,
+                                                              "pMax":  2.4
+                                                          },
+                                                          {
+                                                              "vMin":  12.52,
+                                                              "vMax":  12.83,
+                                                              "iMin":  0,
+                                                              "iMax":  0.07,
+                                                              "pMin":  0,
+                                                              "pMax":  0.9
+                                                          }
+                                                      ]
+                                     },
+                                     {
+                                         "date":  "2026-11-27",
+                                         "hour":  22,
+                                         "channels":  [
+                                                          {
+                                                              "vMin":  12.41,
+                                                              "vMax":  12.74,
+                                                              "iMin":  0.32,
+                                                              "iMax":  0.41,
+                                                              "pMin":  3.97,
+                                                              "pMax":  5.22
+                                                          },
+                                                          {
+                                                              "vMin":  12.31,
+                                                              "vMax":  12.64,
+                                                              "iMin":  0.09,
+                                                              "iMax":  0.18,
+                                                              "pMin":  1.11,
+                                                              "pMax":  2.28
+                                                          },
+                                                          {
+                                                              "vMin":  12.51,
+                                                              "vMax":  12.84,
+                                                              "iMin":  0,
+                                                              "iMax":  0.06,
+                                                              "pMin":  0,
+                                                              "pMax":  0.77
+                                                          }
+                                                      ]
+                                     },
+                                     {
+                                         "date":  "2026-11-27",
+                                         "hour":  23,
+                                         "channels":  [
+                                                          {
+                                                              "vMin":  12.4,
+                                                              "vMax":  12.74,
+                                                              "iMin":  0.32,
+                                                              "iMax":  0.4,
+                                                              "pMin":  3.97,
+                                                              "pMax":  5.1
+                                                          },
+                                                          {
+                                                              "vMin":  12.3,
+                                                              "vMax":  12.64,
+                                                              "iMin":  0.09,
+                                                              "iMax":  0.17,
+                                                              "pMin":  1.11,
+                                                              "pMax":  2.15
+                                                          },
+                                                          {
+                                                              "vMin":  12.5,
+                                                              "vMax":  12.84,
+                                                              "iMin":  0,
+                                                              "iMax":  0.05,
+                                                              "pMin":  0,
+                                                              "pMax":  0.64
+                                                          }
+                                                      ]
+                                     }
+                                 ]
+                   }
+}

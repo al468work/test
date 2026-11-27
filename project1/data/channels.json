@@ -1,0 +1,20 @@
+{
+  "Channels": {
+    "1":  { "name": "Канал 1",  "mac": "DC:06:75:F7:F7:78", "valve": 1, "enabled": true },
+    "2":  { "name": "Канал 2",  "mac": "DC:06:75:F7:F7:78", "valve": 2, "enabled": true },
+    "3":  { "name": "Канал 3",  "mac": "98:88:E0:D9:A3:08", "valve": 1, "enabled": true },
+    "4":  { "name": "Канал 4",  "mac": "98:88:E0:D9:A3:08", "valve": 2, "enabled": true },
+    "5":  { "name": "Канал 5",  "mac": "98:88:E0:D9:A1:CC", "valve": 1, "enabled": true },
+    "6":  { "name": "Канал 6",  "mac": "98:88:E0:D9:A1:CC", "valve": 2, "enabled": true },
+    "7":  { "name": "Канал 7",  "mac": "98:88:E0:D9:9F:AC", "valve": 1, "enabled": true },
+    "8":  { "name": "Канал 8",  "mac": "98:88:E0:D9:9F:AC", "valve": 2, "enabled": true },
+    "9":  { "name": "Канал 9",  "mac": "DC:06:75:F7:F7:78", "valve": 1, "enabled": false },
+    "10": { "name": "Канал 10", "mac": "DC:06:75:F7:F7:78", "valve": 2, "enabled": false },
+    "11": { "name": "Канал 11", "mac": "98:88:E0:D9:A3:08", "valve": 1, "enabled": false },
+    "12": { "name": "Канал 12", "mac": "98:88:E0:D9:A3:08", "valve": 2, "enabled": false },
+    "13": { "name": "Канал 13", "mac": "00:00:00:00:00:00", "valve": 1, "enabled": false },
+    "14": { "name": "Канал 14", "mac": "00:00:00:00:00:00", "valve": 2, "enabled": false },
+    "15": { "name": "Канал 15", "mac": "00:00:00:00:00:00", "valve": 1, "enabled": false },
+    "16": { "name": "Канал 16", "mac": "00:00:00:00:00:00", "valve": 2, "enabled": false }
+  }
+}

@@ -1,0 +1,232 @@
+<div class="app-content-header">
+  <div class="container-fluid d-flex flex-wrap justify-content-between align-items-center gap-2">
+    <h3 class="mb-0">INA3221</h3>
+    <span class="badge text-bg-secondary">демо-данные · 24 ч</span>
+  </div>
+</div>
+
+<div class="app-content">
+  <div class="container-fluid">
+    <div id="inaError" class="d-none alert alert-danger"></div>
+
+    <!-- Текущие показания по трём каналам -->
+    <div class="row" id="inaCards"></div>
+
+    <!-- История за 24 часа: полоса = диапазон мин…макс -->
+    <div class="row">
+      <div class="col-xl-4 col-lg-6">
+        <div class="card h-100">
+          <div class="card-header"><h3 class="card-title">Напряжение за 24 ч, В</h3></div>
+          <div class="card-body p-2" id="inaVoltageChart">
+            <span class="text-muted">Загрузка...</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-4 col-lg-6">
+        <div class="card h-100">
+          <div class="card-header"><h3 class="card-title">Ток за 24 ч, А</h3></div>
+          <div class="card-body p-2" id="inaCurrentChart">
+            <span class="text-muted">Загрузка...</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-4 col-lg-12">
+        <div class="card h-100">
+          <div class="card-header"><h3 class="card-title">Мощность за 24 ч, Вт</h3></div>
+          <div class="card-body p-2" id="inaPowerChart">
+            <span class="text-muted">Загрузка...</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-body">
+        <div class="d-flex flex-wrap gap-3" id="inaLegend"></div>
+        <div class="text-muted small mt-2">
+          Полоса — диапазон значений за час: сплошная линия сверху — максимум,
+          пунктир снизу — минимум.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  (async function () {
+    const DS = window.DataSource;
+    const esc = DS.escapeHtml;
+
+    function num(value) {
+      const n = Number(value);
+      return Number.isFinite(n) ? n : 0;
+    }
+
+    // Строит SVG-график с полосой мин…макс по каждому каналу.
+    //   hours   — массив записей { hour, channels:[...] }
+    //   pick    — функция (record, index) -> { min, max } | null
+    //   opts    — { digits, nonNegative }
+    function buildChart(el, hours, channelCount, pick, opts, ariaLabel) {
+      const W = 720;
+      const H = 260;
+      const padL = 56;
+      const padR = 16;
+      const padT = 16;
+      const padB = 30;
+      const innerW = W - padL - padR;
+      const innerH = H - padT - padB;
+      const digits = opts && opts.digits != null ? opts.digits : 2;
+
+      const records = (Array.isArray(hours) ? hours : [])
+        .filter((rec) => rec && Number.isFinite(Number(rec.hour)))
+        .slice()
+        .sort((a, b) => a.hour - b.hour);
+
+      if (!records.length) {
+        el.innerHTML = '<div class="text-muted p-3">Нет истории</div>';
+        return;
+      }
+
+      let lo = Infinity;
+      let hi = -Infinity;
+      records.forEach((rec) => {
+        for (let i = 0; i < channelCount; i++) {
+          const e = pick(rec, i);
+          if (!e) continue;
+          lo = Math.min(lo, e.min, e.max);
+          hi = Math.max(hi, e.min, e.max);
+        }
+      });
+
+      if (!Number.isFinite(lo) || !Number.isFinite(hi)) {
+        el.innerHTML = '<div class="text-muted p-3">Нет истории</div>';
+        return;
+      }
+
+      if (lo === hi) {
+        lo -= 0.5;
+        hi += 0.5;
+      }
+
+      const pad = (hi - lo) * 0.1;
+      lo -= pad;
+      hi += pad;
+
+      // Ток и мощность не бывают отрицательными — не уводим ось ниже нуля
+      // из-за добавленного запаса.
+      if (opts && opts.nonNegative && lo < 0) lo = 0;
+      if (hi <= lo) hi = lo + 1;
+
+      const hourToX = (h) => padL + innerW * (Math.min(23, Math.max(0, h)) / 23);
+      const valToY = (v) => padT + innerH * (1 - (v - lo) / (hi - lo));
+
+      let grid = '';
+      for (let k = 0; k <= 4; k++) {
+        const val = lo + ((hi - lo) * k) / 4;
+        const yy = valToY(val);
+        grid += `<line x1="${padL}" y1="${yy.toFixed(1)}" x2="${W - padR}" y2="${yy.toFixed(1)}" class="chart-grid"/>`;
+        grid += `<text x="${padL - 8}" y="${(yy + 4).toFixed(1)}" text-anchor="end" class="chart-axis">${val.toFixed(digits)}</text>`;
+      }
+
+      let xlabels = '';
+      [0, 6, 12, 18, 23].forEach((h) => {
+        xlabels += `<text x="${hourToX(h).toFixed(1)}" y="${H - 8}" text-anchor="middle" class="chart-axis">${h}</text>`;
+      });
+
+      let bands = '';
+      let minLines = '';
+      let maxLines = '';
+
+      for (let i = 0; i < channelCount; i++) {
+        const color = DS.channelColor(i + 1);
+        const points = records.map((rec) => {
+          const e = pick(rec, i) || { min: 0, max: 0 };
+          const hour = Number(rec.hour);
+          return {
+            x: hourToX(hour),
+            yMin: valToY(e.min),
+            yMax: valToY(e.max)
+          };
+        });
+
+        const top = points.map((p) => `${p.x.toFixed(1)},${p.yMax.toFixed(1)}`).join(' ');
+        const bottom = points.slice().reverse().map((p) => `${p.x.toFixed(1)},${p.yMin.toFixed(1)}`).join(' ');
+
+        bands += `<polygon points="${top} ${bottom}" fill="${color}" fill-opacity="0.14" stroke="none"/>`;
+        maxLines += `<polyline points="${top}" fill="none" stroke="${color}" stroke-width="1.6" vector-effect="non-scaling-stroke"/>`;
+        minLines += `<polyline points="${bottom}" fill="none" stroke="${color}" stroke-width="1.2" stroke-dasharray="4 3" vector-effect="non-scaling-stroke"/>`;
+      }
+
+      el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" class="chart-svg" role="img" aria-label="${esc(ariaLabel)}">${grid}${bands}${minLines}${maxLines}${xlabels}</svg>`;
+    }
+
+    // Извлекает min/max нужной величины из записи часа по индексу канала.
+    function makePicker(keyMin, keyMax) {
+      return (rec, i) => {
+        const ch = rec.channels && rec.channels[i];
+        if (!ch) return null;
+        return { min: num(ch[keyMin]), max: num(ch[keyMax]) };
+      };
+    }
+
+    try {
+      const { config, history } = await DS.getIna();
+      const channels = (config && config.channels) || [];
+      const address = config && config.address != null
+        ? '0x' + Number(config.address).toString(16).toUpperCase().padStart(2, '0')
+        : '—';
+
+      // Карточки текущих показаний.
+      document.getElementById('inaCards').innerHTML = channels.map((ch, i) => {
+        const color = DS.channelColor(i + 1);
+        const status = ch.enabled
+          ? '<span class="badge text-bg-success">вкл</span>'
+          : '<span class="badge text-bg-secondary">выкл</span>';
+        return `
+          <div class="col-xl-4 col-md-6">
+            <div class="card ina-card" style="border-top:4px solid ${color}">
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <h3 class="card-title mb-0">Канал ${i + 1}</h3>
+                ${status}
+              </div>
+              <div class="card-body">
+                <div class="ina-value">${num(ch.voltage).toFixed(2)} <small>В</small></div>
+                <div class="d-flex justify-content-between mt-2">
+                  <span>Ток: <strong>${num(ch.current).toFixed(2)} А</strong></span>
+                  <span>Мощность: <strong>${num(ch.power).toFixed(2)} Вт</strong></span>
+                </div>
+                <div class="text-muted small mt-2">Шунт: ${ch.shunt || 0} мОм · адрес ${address}</div>
+              </div>
+            </div>
+          </div>`;
+      }).join('');
+
+      const hours = (history && Array.isArray(history.hours)) ? history.hours : [];
+
+      buildChart(
+        document.getElementById('inaVoltageChart'), hours, channels.length,
+        makePicker('vMin', 'vMax'), { digits: 2 },
+        'Напряжение за 24 часа: минимум и максимум'
+      );
+      buildChart(
+        document.getElementById('inaCurrentChart'), hours, channels.length,
+        makePicker('iMin', 'iMax'), { digits: 2, nonNegative: true },
+        'Ток за 24 часа: минимум и максимум'
+      );
+      buildChart(
+        document.getElementById('inaPowerChart'), hours, channels.length,
+        makePicker('pMin', 'pMax'), { digits: 2, nonNegative: true },
+        'Мощность за 24 часа: минимум и максимум'
+      );
+
+      document.getElementById('inaLegend').innerHTML = channels.map((ch, i) => {
+        const color = DS.channelColor(i + 1);
+        return `<span class="legend-item"><span class="legend-swatch" style="background:${color}"></span>Канал ${i + 1}</span>`;
+      }).join('');
+    } catch (e) {
+      const box = document.getElementById('inaError');
+      box.classList.remove('d-none');
+      box.textContent = 'Ошибка загрузки данных: ' + e.message;
+    }
+  })();
+</script>

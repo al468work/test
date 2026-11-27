@@ -1,0 +1,72 @@
+<div class="app-content-header">
+  <div class="container-fluid">
+    <h3 class="mb-0">Часы реального времени</h3>
+  </div>
+</div>
+
+<div class="app-content">
+  <div class="container-fluid">
+    <div id="rtcError" class="d-none alert alert-danger"></div>
+
+    <div class="row">
+      <div class="col-lg-7">
+        <div class="card text-bg-dark h-100">
+          <div class="card-body text-center py-5">
+            <div class="clock-display" id="rtcTime">--:--:--</div>
+            <div class="fs-4 mt-2" id="rtcDate">—</div>
+            <div class="fs-5 text-white-50" id="rtcDay">—</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-5">
+        <div class="card h-100">
+          <div class="card-header"><h3 class="card-title">Сведения</h3></div>
+          <div class="card-body">
+            <dl class="row mb-0">
+              <dt class="col-sm-6">День недели</dt>
+              <dd class="col-sm-6" id="rtcDayName">—</dd>
+              <dt class="col-sm-6">ISO-номер дня</dt>
+              <dd class="col-sm-6" id="rtcIso">—</dd>
+              <dt class="col-sm-6">Источник</dt>
+              <dd class="col-sm-6"><code>data/rtc.json</code></dd>
+            </dl>
+            <div class="alert alert-info mt-3 mb-0 small">
+              Время демонстрационное и идёт от значения из <code>data/rtc.json</code>.
+              После подключения API сюда придёт время с DS3231.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  (async function () {
+    const DS = window.DataSource;
+    const $ = (id) => document.getElementById(id);
+
+    try {
+      const rtc = await DS.getRtc();
+
+      $('rtcDayName').textContent = DS.dayName(rtc.dayOfTheWeek);
+      $('rtcIso').textContent = rtc.dayOfTheWeek;
+      $('rtcDate').textContent = DS.formatDate(rtc);
+
+      let dt = new Date(rtc.year, rtc.month - 1, rtc.day, rtc.hour, rtc.minute, rtc.second);
+
+      function tick() {
+        $('rtcTime').textContent = dt.toLocaleTimeString('ru-RU', { hour12: false });
+        $('rtcDay').textContent = DS.dayName(rtc.dayOfTheWeek) + ' · ' + DS.formatDate(rtc);
+      }
+      tick();
+
+      const timer = setInterval(() => { dt = new Date(dt.getTime() + 1000); tick(); }, 1000);
+      window.__viewCleanup = () => clearInterval(timer);
+    } catch (e) {
+      const box = $('rtcError');
+      box.classList.remove('d-none');
+      box.textContent = 'Ошибка загрузки данных: ' + e.message;
+    }
+  })();
+</script>

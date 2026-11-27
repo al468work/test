@@ -1,0 +1,858 @@
+{
+  "Week": {
+    "1": {
+      "0": {
+        "channel": 2,
+        "enabled": true,
+        "duration": 13
+      },
+      "1": {
+        "channel": 3,
+        "enabled": true,
+        "duration": 20
+      },
+      "2": {
+        "channel": 4,
+        "enabled": true,
+        "duration": 27
+      },
+      "3": {
+        "channel": 5,
+        "enabled": true,
+        "duration": 34
+      },
+      "4": {
+        "channel": 6,
+        "enabled": true,
+        "duration": 41
+      },
+      "5": {
+        "channel": 7,
+        "enabled": true,
+        "duration": 48
+      },
+      "6": {
+        "channel": 8,
+        "enabled": true,
+        "duration": 55
+      },
+      "7": {
+        "channel": 9,
+        "enabled": true,
+        "duration": 12
+      },
+      "8": {
+        "channel": 10,
+        "enabled": true,
+        "duration": 19
+      },
+      "9": {
+        "channel": 11,
+        "enabled": true,
+        "duration": 26
+      },
+      "10": {
+        "channel": 12,
+        "enabled": true,
+        "duration": 33
+      },
+      "11": {
+        "channel": 13,
+        "enabled": true,
+        "duration": 40
+      },
+      "12": {
+        "channel": 14,
+        "enabled": true,
+        "duration": 47
+      },
+      "13": {
+        "channel": 15,
+        "enabled": true,
+        "duration": 54
+      },
+      "14": {
+        "channel": 16,
+        "enabled": true,
+        "duration": 11
+      },
+      "15": {
+        "channel": 1,
+        "enabled": true,
+        "duration": 18
+      },
+      "16": {
+        "channel": 2,
+        "enabled": true,
+        "duration": 25
+      },
+      "17": {
+        "channel": 3,
+        "enabled": true,
+        "duration": 32
+      },
+      "18": {
+        "channel": 4,
+        "enabled": true,
+        "duration": 39
+      },
+      "19": {
+        "channel": 5,
+        "enabled": true,
+        "duration": 46
+      },
+      "20": {
+        "channel": 6,
+        "enabled": true,
+        "duration": 53
+      },
+      "21": {
+        "channel": 7,
+        "enabled": true,
+        "duration": 10
+      },
+      "22": {
+        "channel": 8,
+        "enabled": true,
+        "duration": 17
+      },
+      "23": {
+        "channel": 9,
+        "enabled": true,
+        "duration": 24
+      }
+    },
+    "2": {
+      "0": {
+        "channel": 3,
+        "enabled": true,
+        "duration": 16
+      },
+      "1": {
+        "channel": 4,
+        "enabled": true,
+        "duration": 23
+      },
+      "2": {
+        "channel": 5,
+        "enabled": true,
+        "duration": 30
+      },
+      "3": {
+        "channel": 6,
+        "enabled": true,
+        "duration": 37
+      },
+      "4": {
+        "channel": 7,
+        "enabled": true,
+        "duration": 44
+      },
+      "5": {
+        "channel": 8,
+        "enabled": true,
+        "duration": 51
+      },
+      "6": {
+        "channel": 9,
+        "enabled": true,
+        "duration": 58
+      },
+      "7": {
+        "channel": 10,
+        "enabled": true,
+        "duration": 15
+      },
+      "8": {
+        "channel": 11,
+        "enabled": true,
+        "duration": 22
+      },
+      "9": {
+        "channel": 12,
+        "enabled": true,
+        "duration": 29
+      },
+      "10": {
+        "channel": 13,
+        "enabled": true,
+        "duration": 36
+      },
+      "11": {
+        "channel": 14,
+        "enabled": true,
+        "duration": 43
+      },
+      "12": {
+        "channel": 15,
+        "enabled": true,
+        "duration": 50
+      },
+      "13": {
+        "channel": 16,
+        "enabled": true,
+        "duration": 57
+      },
+      "14": {
+        "channel": 1,
+        "enabled": true,
+        "duration": 14
+      },
+      "15": {
+        "channel": 2,
+        "enabled": true,
+        "duration": 21
+      },
+      "16": {
+        "channel": 3,
+        "enabled": true,
+        "duration": 28
+      },
+      "17": {
+        "channel": 4,
+        "enabled": true,
+        "duration": 35
+      },
+      "18": {
+        "channel": 5,
+        "enabled": true,
+        "duration": 42
+      },
+      "19": {
+        "channel": 6,
+        "enabled": true,
+        "duration": 49
+      },
+      "20": {
+        "channel": 7,
+        "enabled": true,
+        "duration": 56
+      },
+      "21": {
+        "channel": 8,
+        "enabled": true,
+        "duration": 13
+      },
+      "22": {
+        "channel": 9,
+        "enabled": true,
+        "duration": 20
+      },
+      "23": {
+        "channel": 10,
+        "enabled": true,
+        "duration": 27
+      }
+    },
+    "3": {
+      "0": {
+        "channel": 4,
+        "enabled": true,
+        "duration": 19
+      },
+      "1": {
+        "channel": 5,
+        "enabled": true,
+        "duration": 26
+      },
+      "2": {
+        "channel": 6,
+        "enabled": true,
+        "duration": 33
+      },
+      "3": {
+        "channel": 7,
+        "enabled": true,
+        "duration": 40
+      },
+      "4": {
+        "channel": 8,
+        "enabled": true,
+        "duration": 47
+      },
+      "5": {
+        "channel": 9,
+        "enabled": true,
+        "duration": 54
+      },
+      "6": {
+        "channel": 10,
+        "enabled": true,
+        "duration": 11
+      },
+      "7": {
+        "channel": 11,
+        "enabled": true,
+        "duration": 18
+      },
+      "8": {
+        "channel": 12,
+        "enabled": true,
+        "duration": 25
+      },
+      "9": {
+        "channel": 13,
+        "enabled": true,
+        "duration": 32
+      },
+      "10": {
+        "channel": 14,
+        "enabled": true,
+        "duration": 39
+      },
+      "11": {
+        "channel": 15,
+        "enabled": true,
+        "duration": 46
+      },
+      "12": {
+        "channel": 16,
+        "enabled": true,
+        "duration": 53
+      },
+      "13": {
+        "channel": 1,
+        "enabled": true,
+        "duration": 10
+      },
+      "14": {
+        "channel": 2,
+        "enabled": true,
+        "duration": 17
+      },
+      "15": {
+        "channel": 3,
+        "enabled": true,
+        "duration": 24
+      },
+      "16": {
+        "channel": 4,
+        "enabled": true,
+        "duration": 31
+      },
+      "17": {
+        "channel": 5,
+        "enabled": true,
+        "duration": 38
+      },
+      "18": {
+        "channel": 6,
+        "enabled": true,
+        "duration": 45
+      },
+      "19": {
+        "channel": 7,
+        "enabled": true,
+        "duration": 52
+      },
+      "20": {
+        "channel": 8,
+        "enabled": true,
+        "duration": 59
+      },
+      "21": {
+        "channel": 9,
+        "enabled": true,
+        "duration": 16
+      },
+      "22": {
+        "channel": 10,
+        "enabled": true,
+        "duration": 23
+      },
+      "23": {
+        "channel": 11,
+        "enabled": true,
+        "duration": 30
+      }
+    },
+    "4": {
+      "0": {
+        "channel": 5,
+        "enabled": true,
+        "duration": 22
+      },
+      "1": {
+        "channel": 6,
+        "enabled": true,
+        "duration": 29
+      },
+      "2": {
+        "channel": 7,
+        "enabled": true,
+        "duration": 36
+      },
+      "3": {
+        "channel": 8,
+        "enabled": true,
+        "duration": 43
+      },
+      "4": {
+        "channel": 9,
+        "enabled": true,
+        "duration": 50
+      },
+      "5": {
+        "channel": 10,
+        "enabled": true,
+        "duration": 57
+      },
+      "6": {
+        "channel": 11,
+        "enabled": true,
+        "duration": 14
+      },
+      "7": {
+        "channel": 12,
+        "enabled": true,
+        "duration": 21
+      },
+      "8": {
+        "channel": 13,
+        "enabled": true,
+        "duration": 28
+      },
+      "9": {
+        "channel": 14,
+        "enabled": true,
+        "duration": 35
+      },
+      "10": {
+        "channel": 15,
+        "enabled": true,
+        "duration": 42
+      },
+      "11": {
+        "channel": 16,
+        "enabled": true,
+        "duration": 49
+      },
+      "12": {
+        "channel": 1,
+        "enabled": true,
+        "duration": 56
+      },
+      "13": {
+        "channel": 2,
+        "enabled": true,
+        "duration": 13
+      },
+      "14": {
+        "channel": 3,
+        "enabled": true,
+        "duration": 20
+      },
+      "15": {
+        "channel": 4,
+        "enabled": true,
+        "duration": 27
+      },
+      "16": {
+        "channel": 5,
+        "enabled": true,
+        "duration": 34
+      },
+      "17": {
+        "channel": 6,
+        "enabled": true,
+        "duration": 41
+      },
+      "18": {
+        "channel": 7,
+        "enabled": true,
+        "duration": 48
+      },
+      "19": {
+        "channel": 8,
+        "enabled": true,
+        "duration": 55
+      },
+      "20": {
+        "channel": 9,
+        "enabled": true,
+        "duration": 12
+      },
+      "21": {
+        "channel": 10,
+        "enabled": true,
+        "duration": 19
+      },
+      "22": {
+        "channel": 11,
+        "enabled": true,
+        "duration": 26
+      },
+      "23": {
+        "channel": 12,
+        "enabled": true,
+        "duration": 33
+      }
+    },
+    "5": {
+      "0": {
+        "channel": 6,
+        "enabled": true,
+        "duration": 25
+      },
+      "1": {
+        "channel": 7,
+        "enabled": true,
+        "duration": 32
+      },
+      "2": {
+        "channel": 8,
+        "enabled": true,
+        "duration": 39
+      },
+      "3": {
+        "channel": 9,
+        "enabled": true,
+        "duration": 46
+      },
+      "4": {
+        "channel": 10,
+        "enabled": true,
+        "duration": 53
+      },
+      "5": {
+        "channel": 11,
+        "enabled": true,
+        "duration": 10
+      },
+      "6": {
+        "channel": 12,
+        "enabled": true,
+        "duration": 17
+      },
+      "7": {
+        "channel": 13,
+        "enabled": true,
+        "duration": 24
+      },
+      "8": {
+        "channel": 14,
+        "enabled": true,
+        "duration": 31
+      },
+      "9": {
+        "channel": 15,
+        "enabled": true,
+        "duration": 38
+      },
+      "10": {
+        "channel": 16,
+        "enabled": true,
+        "duration": 45
+      },
+      "11": {
+        "channel": 1,
+        "enabled": true,
+        "duration": 52
+      },
+      "12": {
+        "channel": 2,
+        "enabled": true,
+        "duration": 59
+      },
+      "13": {
+        "channel": 3,
+        "enabled": true,
+        "duration": 16
+      },
+      "14": {
+        "channel": 4,
+        "enabled": true,
+        "duration": 23
+      },
+      "15": {
+        "channel": 5,
+        "enabled": true,
+        "duration": 30
+      },
+      "16": {
+        "channel": 6,
+        "enabled": true,
+        "duration": 37
+      },
+      "17": {
+        "channel": 7,
+        "enabled": true,
+        "duration": 44
+      },
+      "18": {
+        "channel": 8,
+        "enabled": true,
+        "duration": 51
+      },
+      "19": {
+        "channel": 9,
+        "enabled": true,
+        "duration": 58
+      },
+      "20": {
+        "channel": 10,
+        "enabled": true,
+        "duration": 15
+      },
+      "21": {
+        "channel": 11,
+        "enabled": true,
+        "duration": 22
+      },
+      "22": {
+        "channel": 12,
+        "enabled": true,
+        "duration": 29
+      },
+      "23": {
+        "channel": 13,
+        "enabled": true,
+        "duration": 36
+      }
+    },
+    "6": {
+      "0": {
+        "channel": 7,
+        "enabled": true,
+        "duration": 28
+      },
+      "1": {
+        "channel": 8,
+        "enabled": true,
+        "duration": 35
+      },
+      "2": {
+        "channel": 9,
+        "enabled": true,
+        "duration": 42
+      },
+      "3": {
+        "channel": 10,
+        "enabled": true,
+        "duration": 49
+      },
+      "4": {
+        "channel": 11,
+        "enabled": true,
+        "duration": 56
+      },
+      "5": {
+        "channel": 12,
+        "enabled": true,
+        "duration": 13
+      },
+      "6": {
+        "channel": 13,
+        "enabled": true,
+        "duration": 20
+      },
+      "7": {
+        "channel": 14,
+        "enabled": true,
+        "duration": 27
+      },
+      "8": {
+        "channel": 15,
+        "enabled": true,
+        "duration": 34
+      },
+      "9": {
+        "channel": 16,
+        "enabled": true,
+        "duration": 41
+      },
+      "10": {
+        "channel": 1,
+        "enabled": true,
+        "duration": 48
+      },
+      "11": {
+        "channel": 2,
+        "enabled": true,
+        "duration": 55
+      },
+      "12": {
+        "channel": 3,
+        "enabled": true,
+        "duration": 12
+      },
+      "13": {
+        "channel": 4,
+        "enabled": true,
+        "duration": 19
+      },
+      "14": {
+        "channel": 5,
+        "enabled": true,
+        "duration": 26
+      },
+      "15": {
+        "channel": 6,
+        "enabled": true,
+        "duration": 33
+      },
+      "16": {
+        "channel": 7,
+        "enabled": true,
+        "duration": 40
+      },
+      "17": {
+        "channel": 8,
+        "enabled": true,
+        "duration": 47
+      },
+      "18": {
+        "channel": 9,
+        "enabled": true,
+        "duration": 54
+      },
+      "19": {
+        "channel": 10,
+        "enabled": true,
+        "duration": 11
+      },
+      "20": {
+        "channel": 11,
+        "enabled": true,
+        "duration": 18
+      },
+      "21": {
+        "channel": 12,
+        "enabled": true,
+        "duration": 25
+      },
+      "22": {
+        "channel": 13,
+        "enabled": true,
+        "duration": 32
+      },
+      "23": {
+        "channel": 14,
+        "enabled": true,
+        "duration": 39
+      }
+    },
+    "7": {
+      "0": {
+        "channel": 8,
+        "enabled": true,
+        "duration": 31
+      },
+      "1": {
+        "channel": 9,
+        "enabled": true,
+        "duration": 38
+      },
+      "2": {
+        "channel": 10,
+        "enabled": true,
+        "duration": 45
+      },
+      "3": {
+        "channel": 11,
+        "enabled": true,
+        "duration": 52
+      },
+      "4": {
+        "channel": 12,
+        "enabled": true,
+        "duration": 59
+      },
+      "5": {
+        "channel": 13,
+        "enabled": true,
+        "duration": 16
+      },
+      "6": {
+        "channel": 14,
+        "enabled": true,
+        "duration": 23
+      },
+      "7": {
+        "channel": 15,
+        "enabled": true,
+        "duration": 30
+      },
+      "8": {
+        "channel": 16,
+        "enabled": true,
+        "duration": 37
+      },
+      "9": {
+        "channel": 1,
+        "enabled": true,
+        "duration": 44
+      },
+      "10": {
+        "channel": 2,
+        "enabled": true,
+        "duration": 51
+      },
+      "11": {
+        "channel": 3,
+        "enabled": true,
+        "duration": 58
+      },
+      "12": {
+        "channel": 4,
+        "enabled": true,
+        "duration": 15
+      },
+      "13": {
+        "channel": 5,
+        "enabled": true,
+        "duration": 22
+      },
+      "14": {
+        "channel": 6,
+        "enabled": true,
+        "duration": 29
+      },
+      "15": {
+        "channel": 7,
+        "enabled": true,
+        "duration": 36
+      },
+      "16": {
+        "channel": 8,
+        "enabled": true,
+        "duration": 43
+      },
+      "17": {
+        "channel": 9,
+        "enabled": true,
+        "duration": 50
+      },
+      "18": {
+        "channel": 10,
+        "enabled": true,
+        "duration": 57
+      },
+      "19": {
+        "channel": 11,
+        "enabled": true,
+        "duration": 14
+      },
+      "20": {
+        "channel": 12,
+        "enabled": true,
+        "duration": 21
+      },
+      "21": {
+        "channel": 1,
+        "enabled": true,
+        "duration": 28
+      },
+      "22": {
+        "channel": 2,
+        "enabled": true,
+        "duration": 35
+      },
+      "23": {
+        "channel": 15,
+        "enabled": true,
+        "duration": 42
+      }
+    }
+  }
+}

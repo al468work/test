@@ -1,0 +1,133 @@
+<div class="app-content-header">
+  <div class="container-fluid">
+    <h3 class="mb-0">Настройки</h3>
+  </div>
+</div>
+
+<div class="app-content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="card h-100">
+          <div class="card-header"><h3 class="card-title">Источник данных</h3></div>
+          <div class="card-body">
+            <p class="mb-2">
+              Сейчас админка работает на <span class="badge text-bg-warning">демо-данных</span>
+              из статических JSON. Подключение к API master ещё не выполнено.
+            </p>
+            <ul class="mb-3">
+              <li><code>data/rtc.json</code> — текущее время</li>
+              <li><code>data/week.json</code> — недельное расписание (7×24)</li>
+              <li><code>data/channels.json</code> — реестр 16 каналов</li>
+              <li><code>data/ina.json</code> — показания INA3221 и история за 24 ч</li>
+            </ul>
+            <div class="alert alert-info mb-0 small">
+              Для перехода на реальные данные достаточно заменить методы в
+              <code>js/data-source.js</code> — структура ответа остаётся прежней.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="card h-100">
+          <div class="card-header"><h3 class="card-title">Оформление</h3></div>
+          <div class="card-body">
+            <p class="text-muted">Тема интерфейса сохраняется в браузере.</p>
+            <div class="btn-group" role="group" id="themeGroup">
+              <button type="button" class="btn btn-outline-primary" data-theme="light">Светлая</button>
+              <button type="button" class="btn btn-outline-primary" data-theme="dark">Тёмная</button>
+              <button type="button" class="btn btn-outline-primary" data-theme="auto">Системная</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="card h-100">
+          <div class="card-header"><h3 class="card-title">Разделы</h3></div>
+          <div class="card-body">
+            <ul class="list-unstyled mb-0">
+              <li><a href="#dashboard">Обзор</a> — сводка по времени, заданию и INA</li>
+              <li><a href="#week">Расписание</a> — сетка 7×24</li>
+              <li><a href="#channels">Каналы</a> — реестр каналов и клапанов</li>
+              <li><a href="#ina">INA</a> — напряжения, токи, история</li>
+              <li><a href="#rtc">Время</a> — часы DS3231 (демо)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="card h-100">
+          <div class="card-header"><h3 class="card-title">Служебное</h3></div>
+          <div class="card-body">
+            <p class="text-muted small">
+              Сброс офлайн-кэша помогает, если после обновления файлов браузер
+              показывает старую версию.
+            </p>
+            <button type="button" class="btn btn-outline-danger" id="resetCacheBtn">Сбросить кэш и Service Worker</button>
+            <div class="mt-2 small" id="resetCacheStatus"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    const THEME_KEY = 'lte-theme';
+    const root = document.documentElement;
+
+    function currentMode() {
+      const stored = localStorage.getItem(THEME_KEY);
+      return (stored === 'dark' || stored === 'light') ? stored : 'auto';
+    }
+
+    function markActive(mode) {
+      document.querySelectorAll('#themeGroup [data-theme]').forEach((btn) => {
+        btn.classList.toggle('active', btn.dataset.theme === mode);
+      });
+    }
+
+    function applyTheme(mode) {
+      if (mode === 'auto') {
+        localStorage.removeItem(THEME_KEY);
+        const dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        root.setAttribute('data-bs-theme', dark ? 'dark' : 'light');
+      } else {
+        localStorage.setItem(THEME_KEY, mode);
+        root.setAttribute('data-bs-theme', mode);
+      }
+      root.style.colorScheme = root.getAttribute('data-bs-theme');
+      markActive(mode);
+    }
+
+    document.getElementById('themeGroup').addEventListener('click', (event) => {
+      const btn = event.target.closest('[data-theme]');
+      if (btn) applyTheme(btn.dataset.theme);
+    });
+    markActive(currentMode());
+
+    document.getElementById('resetCacheBtn').addEventListener('click', async () => {
+      const status = document.getElementById('resetCacheStatus');
+      status.textContent = 'Сброс...';
+      try {
+        if ('caches' in window) {
+          const keys = await caches.keys();
+          await Promise.all(keys.map((key) => caches.delete(key)));
+        }
+        if ('serviceWorker' in navigator) {
+          const regs = await navigator.serviceWorker.getRegistrations();
+          await Promise.all(regs.map((reg) => reg.unregister()));
+        }
+        status.className = 'mt-2 small text-success';
+        status.textContent = 'Кэш и Service Worker сброшены. Перезагрузите страницу.';
+      } catch (e) {
+        status.className = 'mt-2 small text-danger';
+        status.textContent = 'Ошибка сброса: ' + e.message;
+      }
+    });
+  })();
+</script>

@@ -3,15 +3,16 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Админ-панель | AdminLTE 4</title>
-    
+    <title>Админ-панель | master</title>
+
     <!-- Настройки PWA для Android -->
     <link rel="manifest" href="manifest.json" />
     <meta name="theme-color" content="#343a40" />
-    <link rel="apple-touch-icon" href="icon-512.png" />
+    <link rel="apple-touch-icon" href="assets/img/AdminLTELogo.png" />
 
-    <!-- Локальные стили AdminLTE -->
+    <!-- Локальные стили AdminLTE + собственные стили админки -->
     <link rel="stylesheet" href="css/adminlte.min.css" />
+    <link rel="stylesheet" href="css/app.css" />
   </head>
   <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
     <div class="app-wrapper">
@@ -24,6 +25,13 @@
             </li>
             <li class="nav-item d-none d-md-block">
               <span class="nav-link text-muted">Панель управления</span>
+            </li>
+          </ul>
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <span class="nav-link">
+                <span class="badge text-bg-warning" title="Источник данных — тестовые JSON">демо-данные</span>
+              </span>
             </li>
           </ul>
         </div>
@@ -40,19 +48,22 @@
           <nav class="mt-2">
             <ul class="nav sidebar-menu flex-column" role="menu">
               <li class="nav-item">
-                <a href="#dashboard" class="nav-link">
-                  <p>Дашборд</p>
-                </a>
+                <a href="#dashboard" class="nav-link"><p>Обзор</p></a>
               </li>
               <li class="nav-item">
-                <a href="#tables" class="nav-link">
-                  <p>Таблицы</p>
-                </a>
+                <a href="#week" class="nav-link"><p>Расписание</p></a>
               </li>
               <li class="nav-item">
-                <a href="#settings" class="nav-link">
-                  <p>Настройки</p>
-                </a>
+                <a href="#channels" class="nav-link"><p>Каналы</p></a>
+              </li>
+              <li class="nav-item">
+                <a href="#ina" class="nav-link"><p>INA</p></a>
+              </li>
+              <li class="nav-item">
+                <a href="#rtc" class="nav-link"><p>Время</p></a>
+              </li>
+              <li class="nav-item">
+                <a href="#settings" class="nav-link"><p>Настройки</p></a>
               </li>
             </ul>
           </nav>
@@ -66,7 +77,7 @@
 
       <!-- Подвал -->
       <footer class="app-footer">
-        <strong>AdminLTE 4</strong> на GitHub Pages.
+        <strong>Админ-панель master</strong> · демонстрационные данные
       </footer>
     </div>
 
@@ -74,12 +85,17 @@
     <script src="js/bootstrap.bundle.min.js"></script>
     <script src="js/adminlte.min.js"></script>
 
+    <!-- Слой доступа к данным (пока читает тестовые JSON) -->
+    <script src="js/data-source.js"></script>
+
     <!-- Скрипт роутинга и запуска JS внутри подгружаемых страниц -->
     <script>
       const mainContent = document.getElementById('main-content');
       const menuLinks = document.querySelectorAll('.sidebar-menu .nav-link');
+      const ROUTES = ['dashboard', 'week', 'channels', 'ina', 'rtc', 'settings'];
 
-      // Принудительный запуск тегов <script> внутри загруженного HTML
+      // Принудительный запуск тегов <script> внутри загруженного HTML.
+      // Нужен, потому что innerHTML не исполняет скрипты автоматически.
       function executeScripts(container) {
         const scripts = container.querySelectorAll('script');
         scripts.forEach(oldScript => {
@@ -87,27 +103,41 @@
           Array.from(oldScript.attributes).forEach(attr => {
             newScript.setAttribute(attr.name, attr.value);
           });
-          newScript.textContent = oldScript.textContent;
+          if (!oldScript.hasAttribute('src')) {
+            newScript.textContent = oldScript.textContent;
+          }
           oldScript.parentNode.replaceChild(newScript, oldScript);
         });
       }
 
+      // Снимаем таймеры предыдущей вьюхи, чтобы не копить утечки.
+      function runCleanup() {
+        if (typeof window.__viewCleanup === 'function') {
+          try { window.__viewCleanup(); } catch (e) { console.warn('viewCleanup:', e); }
+        }
+        window.__viewCleanup = null;
+      }
+
       // Загрузка HTML-фрагмента и подсветка активного пункта меню
       async function loadView(viewName) {
-        const page = viewName || 'dashboard';
+        const page = ROUTES.includes(viewName) ? viewName : 'dashboard';
 
         menuLinks.forEach(link => {
           const linkHash = link.getAttribute('href').replace('#', '');
           link.classList.toggle('active', linkHash === page);
         });
 
+        runCleanup();
+        mainContent.innerHTML = '<div class="p-4 text-muted">Загрузка раздела...</div>';
+
         try {
-          // Чистый путь без ?t=... для корректной работы офлайн-кэша
+          // Относительный путь без ?t=..., чтобы корректно работал офлайн-кэш
           const response = await fetch(`views/${page}.html`);
           if (!response.ok) throw new Error(`Файл views/${page}.html не найден (${response.status})`);
-          
+
           mainContent.innerHTML = await response.text();
           executeScripts(mainContent);
+          if (typeof window.syncStickyOffsets === 'function') window.syncStickyOffsets();
         } catch (error) {
           mainContent.innerHTML = `<div class="p-4 text-danger">Ошибка: ${error.message}</div>`;
         }
@@ -119,6 +149,32 @@
 
       window.addEventListener('hashchange', () => loadView(getCurrentRoute()));
       window.addEventListener('DOMContentLoaded', () => loadView(getCurrentRoute()));
+    </script>
+
+    <!-- Смещения «липких» шапки, заголовка раздела и заголовков таблиц -->
+    <script>
+      (function () {
+        const root = document.documentElement;
+
+        // Пересчитывает высоты и выставляет CSS-переменные:
+        //   --app-header-height — смещение заголовка раздела;
+        //   --app-table-top     — смещение заголовков таблиц (шапка + заголовок).
+        function syncStickyOffsets() {
+          const header = document.querySelector('.app-header');
+          const contentHeader = document.querySelector('.app-main .app-content-header');
+          const headerHeight = header ? header.offsetHeight : 0;
+          const contentHeaderHeight = contentHeader ? contentHeader.offsetHeight : 0;
+
+          root.style.setProperty('--app-header-height', headerHeight + 'px');
+          root.style.setProperty('--app-table-top', (headerHeight + contentHeaderHeight) + 'px');
+        }
+
+        window.syncStickyOffsets = syncStickyOffsets;
+        window.addEventListener('resize', syncStickyOffsets);
+        window.addEventListener('orientationchange', syncStickyOffsets);
+        window.addEventListener('load', syncStickyOffsets);
+        syncStickyOffsets();
+      })();
     </script>
 
     <!-- Регистрация Service Worker для автономной работы (офлайн) -->
