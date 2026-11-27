@@ -2,9 +2,8 @@
   <div class="container-fluid d-flex justify-content-between align-items-center">
     <h3 class="mb-0">Таблицы данных</h3>
     <div class="d-flex align-items-center gap-2">
-      <!-- Индикатор статуса данных (Онлайн / Из кэша) -->
       <span id="dataStatusBadge" class="badge text-bg-secondary">Ожидание...</span>
-      <button id="reloadDataBtn" class="btn btn-sm btn-outline-primary">Обновить с сервера</button>
+      <button id="reloadDataBtn" class="btn btn-sm btn-outline-primary">Обновить</button>
     </div>
   </div>
 </div>
@@ -15,7 +14,7 @@
       <!-- Шапка карточки -->
       <div class="card-header d-flex flex-wrap justify-content-between align-items-center gap-2">
         <div class="d-flex align-items-center gap-3">
-          <h3 class="card-title mb-0">Список пользователей</h3>
+          <h3 class="card-title mb-0">Справочник данных</h3>
           
           <!-- Панель появляется, когда выбрана строка -->
           <div id="rowActions" class="d-none align-items-center gap-2">
@@ -33,8 +32,8 @@
           <thead class="table-light">
             <tr>
               <th style="width: 60px;">ID</th>
-              <th>Имя</th>
-              <th>Email / Роль</th>
+              <th>Наименование</th>
+              <th>Значение</th>
               <th>Статус</th>
             </tr>
           </thead>
@@ -49,9 +48,9 @@
 
 <script>
   {
-    // Укажите здесь адрес вашего REST API
-    const API_URL = 'https://typicode.com';
-    const LOCAL_STORAGE_KEY = 'cached_users_table';
+    // Берем данные из локального файла вашего проекта
+    const DATA_URL = 'data/users.json';
+    const LOCAL_STORAGE_KEY = 'cached_table_records';
 
     const tbody = document.getElementById('usersTableBody');
     const searchInput = document.getElementById('tableSearch');
@@ -73,26 +72,25 @@
       }
     }
 
-    function renderRows(users) {
-      if (!users || users.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="4" class="text-center py-4 text-muted">Нет данных</td></tr>';
+    function renderRows(items) {
+      if (!items || items.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" class="text-center py-4 text-muted">Нет данных для отображения</td></tr>';
         updateSelectionUI();
         return;
       }
 
-      tbody.innerHTML = users.map(user => `
-        <tr data-id="${user.id}" data-name="${user.name}" style="cursor: pointer; user-select: none;">
-          <td>${user.id}</td>
-          <td>${user.name}</td>
-          <td>${user.email || user.role || '-'}</td>
-          <td><span class="badge text-bg-success">Активен</span></td>
+      tbody.innerHTML = items.map(item => `
+        <tr data-id="${item.id}" data-name="${item.name}" style="cursor: pointer; user-select: none;">
+          <td>${item.id}</td>
+          <td>${item.name}</td>
+          <td>${item.value}</td>
+          <td><span class="badge text-bg-success">${item.status}</span></td>
         </tr>
       `).join('');
 
       updateSelectionUI();
     }
 
-    // Загрузка данных из REST API с резервным чтением из памяти телефона
     async function loadTableData() {
       dataStatusBadge.className = 'badge text-bg-secondary';
       dataStatusBadge.textContent = 'Загрузка...';
@@ -101,26 +99,25 @@
         <tr>
           <td colspan="4" class="text-center py-4 text-muted">
             <div class="spinner-border spinner-border-sm me-2" role="status"></div>
-            Запрос к серверу...
+            Загрузка данных...
           </td>
         </tr>
       `;
 
       try {
-        const response = await fetch(API_URL);
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const response = await fetch(DATA_URL);
+        if (!response.ok) throw new Error(`HTTP ошибка ${response.status}`);
         
-        const users = await response.json();
+        const items = await response.json();
         
-        // Сохраняем свежие данные в localStorage для мгновенного доступа без сети
-        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(users));
+        // Сохраняем свежие данные в localStorage телефона
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(items));
         
         dataStatusBadge.className = 'badge text-bg-success';
-        dataStatusBadge.textContent = 'Онлайн (свежие)';
-        renderRows(users);
+        dataStatusBadge.textContent = navigator.onLine ? 'Из проекта (актуально)' : 'Из кэша (офлайн)';
+        renderRows(items);
 
       } catch (error) {
-        // Если интернета нет или сервер недоступен — берем данные из localStorage
         const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
         if (savedData) {
           dataStatusBadge.className = 'badge text-bg-warning';
@@ -128,11 +125,11 @@
           renderRows(JSON.parse(savedData));
         } else {
           dataStatusBadge.className = 'badge text-bg-danger';
-          dataStatusBadge.textContent = 'Нет сети и кэша';
+          dataStatusBadge.textContent = 'Ошибка загрузки';
           tbody.innerHTML = `
             <tr>
               <td colspan="4" class="text-center py-4 text-danger">
-                Нет подключения к интернету, а сохраненных данных еще нет. Подключитесь к сети и нажмите «Обновить с сервера».
+                <strong>Не удалось загрузить файл data/users.json:</strong> ${error.message}
               </td>
             </tr>
           `;
@@ -140,7 +137,7 @@
       }
     }
 
-    // Одиночный выбор строки по клику
+    // Одиночный выбор строки по клику с подсветкой
     tbody.addEventListener('click', (event) => {
       const clickedRow = event.target.closest('tr');
       if (!clickedRow || !clickedRow.dataset.id) return;
@@ -153,6 +150,7 @@
       updateSelectionUI();
     });
 
+    // Удаление выбранной строки
     deleteSelectedBtn.addEventListener('click', () => {
       const selectedRow = tbody.querySelector('tr.table-primary');
       if (selectedRow) {
@@ -161,6 +159,7 @@
       }
     });
 
+    // Живой поиск по таблице
     searchInput.addEventListener('input', function () {
       const query = this.value.toLowerCase();
       tbody.querySelectorAll('tr').forEach(row => {
