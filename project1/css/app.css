@@ -1,0 +1,176 @@
+/* app.css — собственные стили админки поверх AdminLTE 4 */
+
+/* --- Недельная сетка 7×24 --- */
+.week-grid th,
+.week-grid td {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.week-grid .day-col {
+  min-width: 84px;
+  text-align: left;
+  font-size: 0.8rem;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+.week-grid .day-col small {
+  font-size: 0.68rem;
+  font-weight: 400;
+}
+
+.week-grid .hour-col {
+  width: 34px;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: #6c757d;
+}
+
+.week-cell {
+  height: 30px;
+  padding: 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: default;
+}
+
+.week-cell--empty {
+  background: #f8f9fa;
+}
+
+.week-cell--now {
+  outline: 2px solid #0d6efd;
+  outline-offset: -2px;
+  position: relative;
+  z-index: 1;
+}
+
+/* --- Легенда --- */
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.85rem;
+}
+
+.legend-swatch {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  flex: 0 0 auto;
+}
+
+/* --- Часы --- */
+.clock-display {
+  font-size: 4rem;
+  font-weight: 300;
+  letter-spacing: 2px;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- INA --- */
+.ina-value {
+  font-size: 2rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.ina-value small {
+  font-size: 1rem;
+  font-weight: 400;
+  color: #6c757d;
+}
+
+/* --- Графики (SVG) --- */
+.chart-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.chart-grid {
+  stroke: rgba(0, 0, 0, 0.12);
+  stroke-width: 1;
+}
+
+.chart-axis {
+  fill: #6c757d;
+  font-size: 11px;
+}
+
+/* --- Тёмная тема --- */
+[data-bs-theme="dark"] .week-cell--empty {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+[data-bs-theme="dark"] .week-grid .hour-col {
+  color: #adb5bd;
+}
+
+[data-bs-theme="dark"] .chart-grid {
+  stroke: rgba(255, 255, 255, 0.16);
+}
+
+[data-bs-theme="dark"] .chart-axis {
+  fill: #adb5bd;
+}
+
+[data-bs-theme="dark"] .ina-value small {
+  color: #adb5bd;
+}
+
+/* --- «Липкие» шапка приложения и заголовок раздела --- */
+/* На десктопе AdminLTE задаёт .app-main { overflow: auto }. При неограниченной
+   высоте это делает его контейнером прокрутки, и вложенный sticky-заголовок
+   перестаёт «липнуть» к окну. Возвращаем прокрутку окну. */
+@media (min-width: 992px) {
+  .sidebar-expand-lg.layout-fixed .app-main {
+    overflow: visible;
+  }
+}
+
+/* Верхняя шапка («Панель управления») фиксируется у верхнего края окна. */
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 1034;
+}
+
+/* Заголовок открытого раздела фиксируется под шапкой.
+   Смещение = высота шапки (--app-header-height выставляется в index.html). */
+.app-main .app-content-header {
+  position: sticky;
+  top: var(--app-header-height, 3.5rem);
+  z-index: 1030;
+  background: var(--bs-tertiary-bg);
+  border-bottom: 1px solid var(--bs-border-color);
+}
+
+/* --- «Липкие» заголовки таблиц --- */
+@media (min-width: 992px) {
+  /* Обёртка .table-responsive создаёт контейнер прокрутки (overflow-x: auto)
+     и мешает sticky-заголовку «липнуть» к окну. На десктопе обычные таблицы
+     помещаются по ширине, поэтому горизонтальная прокрутка им не нужна. */
+  .table-responsive {
+    overflow: visible;
+  }
+
+  /* Исключение — широкая недельная сетка: ей горизонтальная прокрутка нужна. */
+  .table-responsive.week-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Заголовки таблиц закрепляются под шапкой и заголовком раздела.
+     Смещение (--app-table-top) = высота шапки + высота заголовка раздела.
+     Недельную сетку (.week-grid) исключаем: у неё прозрачный thead и своя
+     горизонтальная прокрутка. */
+  .app-main .table:not(.week-grid) thead th {
+    position: sticky;
+    top: var(--app-table-top, 8rem);
+    z-index: 1020;
+  }
+}
